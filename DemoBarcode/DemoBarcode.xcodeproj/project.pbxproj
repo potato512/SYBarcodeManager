@@ -1,0 +1,538 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A74ECDEB1D0FB8A000370F1F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A74ECDEA1D0FB8A000370F1F /* main.m */; };
+		A74ECDEE1D0FB8A000370F1F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A74ECDED1D0FB8A000370F1F /* AppDelegate.m */; };
+		A74ECDF11D0FB8A000370F1F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A74ECDF01D0FB8A000370F1F /* ViewController.m */; };
+		A74ECDF41D0FB8A000370F1F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A74ECDF21D0FB8A000370F1F /* Main.storyboard */; };
+		A74ECDF61D0FB8A000370F1F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A74ECDF51D0FB8A000370F1F /* Assets.xcassets */; };
+		A74ECDF91D0FB8A000370F1F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A74ECDF71D0FB8A000370F1F /* LaunchScreen.storyboard */; };
+		A74ECE041D0FB8A000370F1F /* DemoBarcodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A74ECE031D0FB8A000370F1F /* DemoBarcodeTests.m */; };
+		A74ECE0F1D0FB8A000370F1F /* DemoBarcodeUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = A74ECE0E1D0FB8A000370F1F /* DemoBarcodeUITests.m */; };
+		A74ECE1F1D0FB8E400370F1F /* SYBarcodeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A74ECE1E1D0FB8E400370F1F /* SYBarcodeManager.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A74ECE001D0FB8A000370F1F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A74ECDDE1D0FB8A000370F1F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A74ECDE51D0FB8A000370F1F;
+			remoteInfo = DemoBarcode;
+		};
+		A74ECE0B1D0FB8A000370F1F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A74ECDDE1D0FB8A000370F1F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A74ECDE51D0FB8A000370F1F;
+			remoteInfo = DemoBarcode;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		A74ECDE61D0FB8A000370F1F /* DemoBarcode.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoBarcode.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A74ECDEA1D0FB8A000370F1F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		A74ECDEC1D0FB8A000370F1F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		A74ECDED1D0FB8A000370F1F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		A74ECDEF1D0FB8A000370F1F /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		A74ECDF01D0FB8A000370F1F /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		A74ECDF31D0FB8A000370F1F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		A74ECDF51D0FB8A000370F1F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A74ECDF81D0FB8A000370F1F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		A74ECDFA1D0FB8A000370F1F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A74ECDFF1D0FB8A000370F1F /* DemoBarcodeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DemoBarcodeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A74ECE031D0FB8A000370F1F /* DemoBarcodeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoBarcodeTests.m; sourceTree = "<group>"; };
+		A74ECE051D0FB8A000370F1F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A74ECE0A1D0FB8A000370F1F /* DemoBarcodeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DemoBarcodeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A74ECE0E1D0FB8A000370F1F /* DemoBarcodeUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoBarcodeUITests.m; sourceTree = "<group>"; };
+		A74ECE101D0FB8A000370F1F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A74ECE1D1D0FB8E400370F1F /* SYBarcodeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SYBarcodeManager.h; sourceTree = "<group>"; };
+		A74ECE1E1D0FB8E400370F1F /* SYBarcodeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SYBarcodeManager.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A74ECDE31D0FB8A000370F1F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A74ECDFC1D0FB8A000370F1F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A74ECE071D0FB8A000370F1F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A74ECDDD1D0FB8A000370F1F = {
+			isa = PBXGroup;
+			children = (
+				A74ECDE81D0FB8A000370F1F /* DemoBarcode */,
+				A74ECE021D0FB8A000370F1F /* DemoBarcodeTests */,
+				A74ECE0D1D0FB8A000370F1F /* DemoBarcodeUITests */,
+				A74ECDE71D0FB8A000370F1F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A74ECDE71D0FB8A000370F1F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A74ECDE61D0FB8A000370F1F /* DemoBarcode.app */,
+				A74ECDFF1D0FB8A000370F1F /* DemoBarcodeTests.xctest */,
+				A74ECE0A1D0FB8A000370F1F /* DemoBarcodeUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A74ECDE81D0FB8A000370F1F /* DemoBarcode */ = {
+			isa = PBXGroup;
+			children = (
+				A74ECDEC1D0FB8A000370F1F /* AppDelegate.h */,
+				A74ECDED1D0FB8A000370F1F /* AppDelegate.m */,
+				A74ECDEF1D0FB8A000370F1F /* ViewController.h */,
+				A74ECDF01D0FB8A000370F1F /* ViewController.m */,
+				A74ECE1C1D0FB8E400370F1F /* Barcode */,
+				A74ECDF21D0FB8A000370F1F /* Main.storyboard */,
+				A74ECDF51D0FB8A000370F1F /* Assets.xcassets */,
+				A74ECDF71D0FB8A000370F1F /* LaunchScreen.storyboard */,
+				A74ECDFA1D0FB8A000370F1F /* Info.plist */,
+				A74ECDE91D0FB8A000370F1F /* Supporting Files */,
+			);
+			path = DemoBarcode;
+			sourceTree = "<group>";
+		};
+		A74ECDE91D0FB8A000370F1F /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A74ECDEA1D0FB8A000370F1F /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A74ECE021D0FB8A000370F1F /* DemoBarcodeTests */ = {
+			isa = PBXGroup;
+			children = (
+				A74ECE031D0FB8A000370F1F /* DemoBarcodeTests.m */,
+				A74ECE051D0FB8A000370F1F /* Info.plist */,
+			);
+			path = DemoBarcodeTests;
+			sourceTree = "<group>";
+		};
+		A74ECE0D1D0FB8A000370F1F /* DemoBarcodeUITests */ = {
+			isa = PBXGroup;
+			children = (
+				A74ECE0E1D0FB8A000370F1F /* DemoBarcodeUITests.m */,
+				A74ECE101D0FB8A000370F1F /* Info.plist */,
+			);
+			path = DemoBarcodeUITests;
+			sourceTree = "<group>";
+		};
+		A74ECE1C1D0FB8E400370F1F /* Barcode */ = {
+			isa = PBXGroup;
+			children = (
+				A74ECE1D1D0FB8E400370F1F /* SYBarcodeManager.h */,
+				A74ECE1E1D0FB8E400370F1F /* SYBarcodeManager.m */,
+			);
+			path = Barcode;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A74ECDE51D0FB8A000370F1F /* DemoBarcode */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A74ECE131D0FB8A000370F1F /* Build configuration list for PBXNativeTarget "DemoBarcode" */;
+			buildPhases = (
+				A74ECDE21D0FB8A000370F1F /* Sources */,
+				A74ECDE31D0FB8A000370F1F /* Frameworks */,
+				A74ECDE41D0FB8A000370F1F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DemoBarcode;
+			productName = DemoBarcode;
+			productReference = A74ECDE61D0FB8A000370F1F /* DemoBarcode.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A74ECDFE1D0FB8A000370F1F /* DemoBarcodeTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A74ECE161D0FB8A000370F1F /* Build configuration list for PBXNativeTarget "DemoBarcodeTests" */;
+			buildPhases = (
+				A74ECDFB1D0FB8A000370F1F /* Sources */,
+				A74ECDFC1D0FB8A000370F1F /* Frameworks */,
+				A74ECDFD1D0FB8A000370F1F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A74ECE011D0FB8A000370F1F /* PBXTargetDependency */,
+			);
+			name = DemoBarcodeTests;
+			productName = DemoBarcodeTests;
+			productReference = A74ECDFF1D0FB8A000370F1F /* DemoBarcodeTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		A74ECE091D0FB8A000370F1F /* DemoBarcodeUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A74ECE191D0FB8A000370F1F /* Build configuration list for PBXNativeTarget "DemoBarcodeUITests" */;
+			buildPhases = (
+				A74ECE061D0FB8A000370F1F /* Sources */,
+				A74ECE071D0FB8A000370F1F /* Frameworks */,
+				A74ECE081D0FB8A000370F1F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A74ECE0C1D0FB8A000370F1F /* PBXTargetDependency */,
+			);
+			name = DemoBarcodeUITests;
+			productName = DemoBarcodeUITests;
+			productReference = A74ECE0A1D0FB8A000370F1F /* DemoBarcodeUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A74ECDDE1D0FB8A000370F1F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0720;
+				ORGANIZATIONNAME = zhangshaoyu;
+				TargetAttributes = {
+					A74ECDE51D0FB8A000370F1F = {
+						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = 5JH8ZFBFJD;
+					};
+					A74ECDFE1D0FB8A000370F1F = {
+						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = 5JH8ZFBFJD;
+						TestTargetID = A74ECDE51D0FB8A000370F1F;
+					};
+					A74ECE091D0FB8A000370F1F = {
+						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = 5JH8ZFBFJD;
+						TestTargetID = A74ECDE51D0FB8A000370F1F;
+					};
+				};
+			};
+			buildConfigurationList = A74ECDE11D0FB8A000370F1F /* Build configuration list for PBXProject "DemoBarcode" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A74ECDDD1D0FB8A000370F1F;
+			productRefGroup = A74ECDE71D0FB8A000370F1F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A74ECDE51D0FB8A000370F1F /* DemoBarcode */,
+				A74ECDFE1D0FB8A000370F1F /* DemoBarcodeTests */,
+				A74ECE091D0FB8A000370F1F /* DemoBarcodeUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A74ECDE41D0FB8A000370F1F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A74ECDF91D0FB8A000370F1F /* LaunchScreen.storyboard in Resources */,
+				A74ECDF61D0FB8A000370F1F /* Assets.xcassets in Resources */,
+				A74ECDF41D0FB8A000370F1F /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A74ECDFD1D0FB8A000370F1F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A74ECE081D0FB8A000370F1F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A74ECDE21D0FB8A000370F1F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A74ECE1F1D0FB8E400370F1F /* SYBarcodeManager.m in Sources */,
+				A74ECDF11D0FB8A000370F1F /* ViewController.m in Sources */,
+				A74ECDEE1D0FB8A000370F1F /* AppDelegate.m in Sources */,
+				A74ECDEB1D0FB8A000370F1F /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A74ECDFB1D0FB8A000370F1F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A74ECE041D0FB8A000370F1F /* DemoBarcodeTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A74ECE061D0FB8A000370F1F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A74ECE0F1D0FB8A000370F1F /* DemoBarcodeUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A74ECE011D0FB8A000370F1F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A74ECDE51D0FB8A000370F1F /* DemoBarcode */;
+			targetProxy = A74ECE001D0FB8A000370F1F /* PBXContainerItemProxy */;
+		};
+		A74ECE0C1D0FB8A000370F1F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A74ECDE51D0FB8A000370F1F /* DemoBarcode */;
+			targetProxy = A74ECE0B1D0FB8A000370F1F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		A74ECDF21D0FB8A000370F1F /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A74ECDF31D0FB8A000370F1F /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		A74ECDF71D0FB8A000370F1F /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A74ECDF81D0FB8A000370F1F /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		A74ECE111D0FB8A000370F1F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		A74ECE121D0FB8A000370F1F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A74ECE141D0FB8A000370F1F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = DemoBarcode/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zhangshaoyu.DemoBarcode;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A74ECE151D0FB8A000370F1F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = DemoBarcode/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zhangshaoyu.DemoBarcode;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		A74ECE171D0FB8A000370F1F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = DemoBarcodeTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zhangshaoyu.DemoBarcodeTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DemoBarcode.app/DemoBarcode";
+			};
+			name = Debug;
+		};
+		A74ECE181D0FB8A000370F1F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = DemoBarcodeTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zhangshaoyu.DemoBarcodeTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DemoBarcode.app/DemoBarcode";
+			};
+			name = Release;
+		};
+		A74ECE1A1D0FB8A000370F1F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = DemoBarcodeUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zhangshaoyu.DemoBarcodeUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = DemoBarcode;
+				USES_XCTRUNNER = YES;
+			};
+			name = Debug;
+		};
+		A74ECE1B1D0FB8A000370F1F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = DemoBarcodeUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zhangshaoyu.DemoBarcodeUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = DemoBarcode;
+				USES_XCTRUNNER = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A74ECDE11D0FB8A000370F1F /* Build configuration list for PBXProject "DemoBarcode" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A74ECE111D0FB8A000370F1F /* Debug */,
+				A74ECE121D0FB8A000370F1F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A74ECE131D0FB8A000370F1F /* Build configuration list for PBXNativeTarget "DemoBarcode" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A74ECE141D0FB8A000370F1F /* Debug */,
+				A74ECE151D0FB8A000370F1F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		A74ECE161D0FB8A000370F1F /* Build configuration list for PBXNativeTarget "DemoBarcodeTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A74ECE171D0FB8A000370F1F /* Debug */,
+				A74ECE181D0FB8A000370F1F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		A74ECE191D0FB8A000370F1F /* Build configuration list for PBXNativeTarget "DemoBarcodeUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A74ECE1A1D0FB8A000370F1F /* Debug */,
+				A74ECE1B1D0FB8A000370F1F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A74ECDDE1D0FB8A000370F1F /* Project object */;
+}
