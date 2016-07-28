@@ -11,6 +11,8 @@
 
 @interface ViewController ()
 
+@property (nonatomic, strong) SYBarcodeManager *scanningBarcode;
+
 @end
 
 @implementation ViewController
@@ -20,6 +22,10 @@
     // Do any additional setup after loading the view, typically from a nib.
     
     self.title = @"二维码的使用";
+    
+    UIBarButtonItem *scanItem = [[UIBarButtonItem alloc] initWithTitle:@"scan" style:UIBarButtonItemStyleDone target:self action:@selector(scanClick:)];
+    UIBarButtonItem *cancelItem = [[UIBarButtonItem alloc] initWithTitle:@"cancel" style:UIBarButtonItemStyleDone target:self action:@selector(cancelClick:)];
+    self.navigationItem.leftBarButtonItems = @[scanItem, cancelItem];
     
     UIBarButtonItem *clearItem = [[UIBarButtonItem alloc] initWithTitle:@"clear" style:UIBarButtonItemStyleDone target:self action:@selector(clearClick:)];
     UIBarButtonItem *showItem = [[UIBarButtonItem alloc] initWithTitle:@"show" style:UIBarButtonItemStyleDone target:self action:@selector(showClick:)];
@@ -53,6 +59,34 @@
 //    imageview02.backgroundColor = [UIColor grayColor];
     imageview02.tag = 2000;
 }
+
+#pragma mark - 生成码扫描
+
+- (SYBarcodeManager *)scanningBarcode
+{
+    if (!_scanningBarcode)
+    {
+        _scanningBarcode = [[SYBarcodeManager alloc] init];
+    }
+    
+    return _scanningBarcode;
+}
+
+- (void)scanClick:(UIBarButtonItem *)item
+{
+    [self.scanningBarcode barcodeScanningWithFrame:CGRectMake(60.0, (CGRectGetHeight(self.view.bounds) - (CGRectGetWidth(self.view.bounds) - 60.0 * 2)) / 2, (CGRectGetWidth(self.view.bounds) - 60.0 * 2), (CGRectGetWidth(self.view.bounds) - 60.0 * 2)) view:self.view complete:^(NSString *scanResult) {
+        
+        NSLog(@"scanResult = %@", scanResult);
+        
+    }];
+}
+
+- (void)cancelClick:(UIBarButtonItem *)item
+{
+    [self.scanningBarcode barcodeScanningCancel];
+}
+
+#pragma mark - 二维码生成
 
 - (void)clearClick:(UIBarButtonItem *)item
 {

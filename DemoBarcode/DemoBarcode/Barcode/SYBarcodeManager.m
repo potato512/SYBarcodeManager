@@ -7,11 +7,123 @@
 //
 
 #import "SYBarcodeManager.h"
+#import <AVFoundation/AVFoundation.h>
+
+typedef void (^ScanningComplete)(NSString *scanResult);
+//static ScanningComplete scanningComplete;
 
 typedef void (^SaveToPhotosAlbumComplete)(BOOL isSuccess);
 static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 
+@interface SYBarcodeManager () <AVCaptureMetadataOutputObjectsDelegate>
+
+@property (nonatomic, strong) AVCaptureSession *avSession;
+@property (nonatomic, strong) AVCaptureVideoPreviewLayer *avLayer;
+
+@property (nonatomic, copy) ScanningComplete scanningComplete;
+
+@end
+
 @implementation SYBarcodeManager
+
+#pragma mark - 扫描二维码
+
+/// 退出扫描
+- (void)barcodeScanningCancel
+{
+    [self.avSession stopRunning];
+    if (self.avLayer.superlayer)
+    {
+        [self.avLayer removeFromSuperlayer];
+    }
+}
+
+/**
+ *  扫描二维码
+ *
+ *  @param rect     扫描框frame属性
+ *  @param view     扫描框父视图
+ *  @param complete 扫描结果回调
+ */
+- (void)barcodeScanningWithFrame:(CGRect)rect view:(UIView *)view complete:(void (^)(NSString *scanResult))complete
+{
+    // 扫描框的位置和大小
+    self.avLayer.frame = rect;
+    if (view)
+    {
+        [view.layer insertSublayer:self.avLayer above:0];
+    }
+    
+    self.scanningComplete = [complete copy];
+    
+    // 开始捕获
+    [self.avSession startRunning];
+}
+
+- (AVCaptureSession *)avSession
+{
+    if (!_avSession)
+    {
+        // 获取摄像设备
+        AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+        // 创建输入流
+        AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:device error:nil];
+        
+        // 创建输出流
+        AVCaptureMetadataOutput *output = [[AVCaptureMetadataOutput alloc] init];
+        // 设置代理 在主线程里刷新
+        [output setMetadataObjectsDelegate:self queue:dispatch_get_main_queue()];
+        
+        // 初始化链接对象
+        _avSession = [[AVCaptureSession alloc] init];
+        // 高质量采集率
+        [_avSession setSessionPreset:AVCaptureSessionPresetHigh];
+        
+        [_avSession addInput:input];
+        [_avSession addOutput:output];
+        
+        // 设置扫码支持的编码格式(如下设置条形码和二维码兼容)
+        output.metadataObjectTypes = @[AVMetadataObjectTypeQRCode, AVMetadataObjectTypeEAN13Code, AVMetadataObjectTypeEAN8Code, AVMetadataObjectTypeCode128Code];
+    }
+    
+    return _avSession;
+}
+
+- (AVCaptureVideoPreviewLayer *)avLayer
+{
+    if (!_avLayer)
+    {
+        _avLayer = [AVCaptureVideoPreviewLayer layerWithSession:self.avSession];
+        _avLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+    }
+    
+    return _avLayer;
+}
+
+// 通过代理方法获取扫描到的结果
+- (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputMetadataObjects:(NSArray *)metadataObjects fromConnection:(AVCaptureConnection *)connection
+{
+    NSLog(@"%s",__func__);
+    
+    if (metadataObjects.count > 0)
+    {
+        // [session stopRunning];
+        AVMetadataMachineReadableCodeObject *metadataObject = [metadataObjects objectAtIndex: 0];
+        // 输出扫描字符串
+        NSLog(@"metadataObject = %@，value = %@", metadataObject, metadataObject.stringValue);
+        
+        // 停止扫描
+        [self.avSession stopRunning];
+        
+        if (self.scanningComplete)
+        {
+            NSString *scanResult = metadataObject.stringValue;
+            self.scanningComplete(scanResult);
+        }
+    }
+}
+
+#pragma mark - 生成二维码
 
 // 根据字符内容生成二维码图片CIImage
 + (CIImage *)barcodeCIImageWithContent:(NSString *)content

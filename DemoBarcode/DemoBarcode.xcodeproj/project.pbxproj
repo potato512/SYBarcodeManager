@@ -428,10 +428,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = DemoBarcode/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.zhangshaoyu.DemoBarcode;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zhangshaoyu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -440,10 +441,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = DemoBarcode/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.zhangshaoyu.DemoBarcode;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zhangshaoyu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -515,6 +517,7 @@
 				A74ECE151D0FB8A000370F1F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A74ECE161D0FB8A000370F1F /* Build configuration list for PBXNativeTarget "DemoBarcodeTests" */ = {
 			isa = XCConfigurationList;
@@ -523,6 +526,7 @@
 				A74ECE181D0FB8A000370F1F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A74ECE191D0FB8A000370F1F /* Build configuration list for PBXNativeTarget "DemoBarcodeUITests" */ = {
 			isa = XCConfigurationList;
@@ -531,6 +535,7 @@
 				A74ECE1B1D0FB8A000370F1F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
