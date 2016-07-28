@@ -60,7 +60,7 @@
     imageview02.tag = 2000;
 }
 
-#pragma mark - 生成码扫描
+#pragma mark - 二维码扫描
 
 - (SYBarcodeManager *)scanningBarcode
 {
