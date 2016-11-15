@@ -1,4 +1,4 @@
-# BarcodeManager
+# SYBarcodeManager
 二维码操作封装类
 
 * 扫描二维码
