@@ -2,7 +2,7 @@
 二维码操作封装类
 
 * 扫描二维码
-#扫描二维码使用示例
+# 代码示例
 ~~~ javascript
 #import "SYBarcodeManager.h"
 ~~~
@@ -30,7 +30,7 @@ NSLog(@"scanResult = %@", scanResult);
 
 * 生成用户自定义内容的二维码，可以自定义颜色和大小。
 
-#生成二维码使用示例
+# 代码示例
 ~~~ javascript
 #import "SYBarcodeManager.h"
 ~~~
@@ -42,7 +42,7 @@ UIImage *image = [SYBarcodeManager barcodeImageWithContent:@"https://github.com/
 UIImage *image = [SYBarcodeManager barcodeImageWithContent:@"https://github.com/potato512/BarcodeManager" size:200.0];
 ~~~
 
-#生成二维码效果图
+# 生成二维码效果图
 
 ![codeSave.gif](./images/codeSave.gif) 
 
