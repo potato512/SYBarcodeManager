@@ -25,7 +25,8 @@
     
     UIBarButtonItem *scanItem = [[UIBarButtonItem alloc] initWithTitle:@"scan" style:UIBarButtonItemStyleDone target:self action:@selector(scanClick:)];
     UIBarButtonItem *cancelItem = [[UIBarButtonItem alloc] initWithTitle:@"cancel" style:UIBarButtonItemStyleDone target:self action:@selector(cancelClick:)];
-    self.navigationItem.leftBarButtonItems = @[scanItem, cancelItem];
+    UIBarButtonItem *reloadItem = [[UIBarButtonItem alloc] initWithTitle:@"reload" style:UIBarButtonItemStyleDone target:self action:@selector(reloadClick:)];
+    self.navigationItem.leftBarButtonItems = @[scanItem, cancelItem, reloadItem];
     
     UIBarButtonItem *clearItem = [[UIBarButtonItem alloc] initWithTitle:@"clear" style:UIBarButtonItemStyleDone target:self action:@selector(clearClick:)];
     UIBarButtonItem *showItem = [[UIBarButtonItem alloc] initWithTitle:@"show" style:UIBarButtonItemStyleDone target:self action:@selector(showClick:)];
@@ -74,16 +75,26 @@
 
 - (void)scanClick:(UIBarButtonItem *)item
 {
+    self.scanningBarcode.scanRadius = 50.0;
+    self.scanningBarcode.showScanline = YES;
+    self.scanningBarcode.scanlineColor = [UIColor redColor];
+    self.scanningBarcode.showScanCorner = YES;
+    self.scanningBarcode.scanCornerColor = [UIColor greenColor];
     [self.scanningBarcode barcodeScanningWithFrame:CGRectMake(60.0, (CGRectGetHeight(self.view.bounds) - (CGRectGetWidth(self.view.bounds) - 60.0 * 2)) / 2, (CGRectGetWidth(self.view.bounds) - 60.0 * 2), (CGRectGetWidth(self.view.bounds) - 60.0 * 2)) view:self.view complete:^(NSString *scanResult) {
         
         NSLog(@"scanResult = %@", scanResult);
-        
+        [[[UIAlertView alloc] initWithTitle:nil message:scanResult delegate:nil cancelButtonTitle:nil otherButtonTitles:@"ok", nil] show];
     }];
 }
 
 - (void)cancelClick:(UIBarButtonItem *)item
 {
     [self.scanningBarcode barcodeScanningCancel];
+}
+
+- (void)reloadClick:(UIBarButtonItem *)item
+{
+    [self.scanningBarcode barcodeScanningStart];
 }
 
 #pragma mark - 二维码生成

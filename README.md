@@ -10,12 +10,22 @@
 ~~~ javascript
 self.scanningBarcode = [[SYBarcodeManager alloc] init];
 
+self.scanningBarcode.scanRadius = 50.0;
+self.scanningBarcode.showScanline = YES;
+self.scanningBarcode.scanlineColor = [UIColor redColor];
+self.scanningBarcode.showScanCorner = YES;
+self.scanningBarcode.scanCornerColor = [UIColor greenColor];
+
 [self.scanningBarcode barcodeScanningWithFrame:CGRectMake(60.0, (CGRectGetHeight(self.view.bounds) - (CGRectGetWidth(self.view.bounds) - 60.0 * 2)) / 2, (CGRectGetWidth(self.view.bounds) - 60.0 * 2), (CGRectGetWidth(self.view.bounds) - 60.0 * 2)) view:self.view complete:^(NSString *scanResult) {
 
 NSLog(@"scanResult = %@", scanResult);
 
 }];
 ~~~
+
+# 扫描二维码效果图
+
+![codeScan.gif](./images/codeScan.gif) 
 
 
 * 生成用户自定义内容的二维码，可以自定义颜色和大小。
@@ -33,9 +43,39 @@ UIImage *image = [SYBarcodeManager barcodeImageWithContent:@"https://github.com/
 ~~~
 
 #生成二维码效果图
-* 生成前
 
-![clear](./images/clear.png) 
-* 生成后
+![codeSave.gif](./images/codeSave.gif) 
 
-![barcode](./images/barcode.png) 
+
+# 修改完善
+* 20170922
+  * 版本号：1.1.0
+  * 新增功能属性
+    * 停止扫描后重新开始扫描
+    * 扫描线属性
+
+~~~ javascript
+/// 重新开始扫描
+- (void)barcodeScanningStart;
+
+/// 是否显示扫描线，默认NO不显示
+@property (nonatomic, assign) BOOL showScanline;
+/// 扫描线颜色，默认灰色
+@property (nonatomic, strong) UIColor *scanlineColor;
+/// 是否显示角线，默认NO不显示
+@property (nonatomic, assign) BOOL showScanCorner;
+/// 角线颜色，默认黑色
+@property (nonatomic, strong) UIColor *scanCornerColor;
+/// 扫描线动画时间，默认1.6秒
+@property (nonatomic, assign) NSTimeInterval scanTimeDuration;
+/// 圆角，默认方角
+@property (nonatomic, assign) CGFloat scanRadius;
+
+~~~
+
+* 20170921
+  * 版本号：1.0.0
+  * 源码与Demo分离
+
+
+

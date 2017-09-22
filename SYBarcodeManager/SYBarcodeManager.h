@@ -11,6 +11,19 @@
 
 @interface SYBarcodeManager : NSObject
 
+/// 是否显示扫描线，默认NO不显示
+@property (nonatomic, assign) BOOL showScanline;
+/// 扫描线颜色，默认灰色
+@property (nonatomic, strong) UIColor *scanlineColor;
+/// 是否显示角线，默认NO不显示
+@property (nonatomic, assign) BOOL showScanCorner;
+/// 角线颜色，默认黑色
+@property (nonatomic, strong) UIColor *scanCornerColor;
+/// 扫描线动画时间，默认1.6秒
+@property (nonatomic, assign) NSTimeInterval scanTimeDuration;
+/// 圆角，默认方角
+@property (nonatomic, assign) CGFloat scanRadius;
+
 #pragma mark - 扫描二维码
 
 /**
@@ -24,6 +37,9 @@
 
 /// 退出扫描
 - (void)barcodeScanningCancel;
+
+/// 重新开始扫描
+- (void)barcodeScanningStart;
 
 #pragma mark - 生成二维码
 

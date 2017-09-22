@@ -15,7 +15,7 @@
 		A74ECDF91D0FB8A000370F1F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A74ECDF71D0FB8A000370F1F /* LaunchScreen.storyboard */; };
 		A74ECE041D0FB8A000370F1F /* DemoBarcodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A74ECE031D0FB8A000370F1F /* DemoBarcodeTests.m */; };
 		A74ECE0F1D0FB8A000370F1F /* DemoBarcodeUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = A74ECE0E1D0FB8A000370F1F /* DemoBarcodeUITests.m */; };
-		A74ECE1F1D0FB8E400370F1F /* SYBarcodeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A74ECE1E1D0FB8E400370F1F /* SYBarcodeManager.m */; };
+		A7D8B9D31F73ACDB005FF1C7 /* SYBarcodeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D8B9D21F73ACDB005FF1C7 /* SYBarcodeManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,8 +52,8 @@
 		A74ECE0A1D0FB8A000370F1F /* DemoBarcodeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DemoBarcodeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A74ECE0E1D0FB8A000370F1F /* DemoBarcodeUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoBarcodeUITests.m; sourceTree = "<group>"; };
 		A74ECE101D0FB8A000370F1F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A74ECE1D1D0FB8E400370F1F /* SYBarcodeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SYBarcodeManager.h; sourceTree = "<group>"; };
-		A74ECE1E1D0FB8E400370F1F /* SYBarcodeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SYBarcodeManager.m; sourceTree = "<group>"; };
+		A7D8B9D11F73ACDB005FF1C7 /* SYBarcodeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SYBarcodeManager.h; sourceTree = "<group>"; };
+		A7D8B9D21F73ACDB005FF1C7 /* SYBarcodeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SYBarcodeManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,11 +108,7 @@
 				A74ECDED1D0FB8A000370F1F /* AppDelegate.m */,
 				A74ECDEF1D0FB8A000370F1F /* ViewController.h */,
 				A74ECDF01D0FB8A000370F1F /* ViewController.m */,
-				A74ECE1C1D0FB8E400370F1F /* Barcode */,
-				A74ECDF21D0FB8A000370F1F /* Main.storyboard */,
-				A74ECDF51D0FB8A000370F1F /* Assets.xcassets */,
-				A74ECDF71D0FB8A000370F1F /* LaunchScreen.storyboard */,
-				A74ECDFA1D0FB8A000370F1F /* Info.plist */,
+				A7D8B9D01F73ACDB005FF1C7 /* SYBarcodeManager */,
 				A74ECDE91D0FB8A000370F1F /* Supporting Files */,
 			);
 			path = DemoBarcode;
@@ -121,6 +117,10 @@
 		A74ECDE91D0FB8A000370F1F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				A74ECDF21D0FB8A000370F1F /* Main.storyboard */,
+				A74ECDF51D0FB8A000370F1F /* Assets.xcassets */,
+				A74ECDF71D0FB8A000370F1F /* LaunchScreen.storyboard */,
+				A74ECDFA1D0FB8A000370F1F /* Info.plist */,
 				A74ECDEA1D0FB8A000370F1F /* main.m */,
 			);
 			name = "Supporting Files";
@@ -144,13 +144,14 @@
 			path = DemoBarcodeUITests;
 			sourceTree = "<group>";
 		};
-		A74ECE1C1D0FB8E400370F1F /* Barcode */ = {
+		A7D8B9D01F73ACDB005FF1C7 /* SYBarcodeManager */ = {
 			isa = PBXGroup;
 			children = (
-				A74ECE1D1D0FB8E400370F1F /* SYBarcodeManager.h */,
-				A74ECE1E1D0FB8E400370F1F /* SYBarcodeManager.m */,
+				A7D8B9D11F73ACDB005FF1C7 /* SYBarcodeManager.h */,
+				A7D8B9D21F73ACDB005FF1C7 /* SYBarcodeManager.m */,
 			);
-			path = Barcode;
+			name = SYBarcodeManager;
+			path = ../../SYBarcodeManager;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -220,7 +221,7 @@
 				TargetAttributes = {
 					A74ECDE51D0FB8A000370F1F = {
 						CreatedOnToolsVersion = 7.2.1;
-						DevelopmentTeam = 5JH8ZFBFJD;
+						DevelopmentTeam = 6CWC9A8AA5;
 					};
 					A74ECDFE1D0FB8A000370F1F = {
 						CreatedOnToolsVersion = 7.2.1;
@@ -286,7 +287,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A74ECE1F1D0FB8E400370F1F /* SYBarcodeManager.m in Sources */,
+				A7D8B9D31F73ACDB005FF1C7 /* SYBarcodeManager.m in Sources */,
 				A74ECDF11D0FB8A000370F1F /* ViewController.m in Sources */,
 				A74ECDEE1D0FB8A000370F1F /* AppDelegate.m in Sources */,
 				A74ECDEB1D0FB8A000370F1F /* main.m in Sources */,
@@ -428,12 +429,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: junjie cai (5BE779GQZQ)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: junjie cai (5BE779GQZQ)";
 				INFOPLIST_FILE = DemoBarcode/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.zhangshaoyu;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vstecs.VSTOB;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "37dc1180-9d54-4386-bed4-4bf62a77a890";
 			};
 			name = Debug;
 		};
@@ -441,12 +444,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: junjie cai (5BE779GQZQ)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: junjie cai (5BE779GQZQ)";
 				INFOPLIST_FILE = DemoBarcode/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.zhangshaoyu;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vstecs.VSTOB;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "37dc1180-9d54-4386-bed4-4bf62a77a890";
 			};
 			name = Release;
 		};
