@@ -8,19 +8,23 @@
 ~~~
 
 ~~~ javascript
-self.scanningBarcode = [[SYBarcodeManager alloc] init];
+// 实例化
+self.scanningBarcode = [[SYBarcodeManager alloc] initWithFrame:self.view.bounds view:self.view];
 
-self.scanningBarcode.scanRadius = 50.0;
-self.scanningBarcode.showScanline = YES;
+// 属性设置
+self.scanningBarcode.maskColor = [UIColor orangeColor];
 self.scanningBarcode.scanlineColor = [UIColor redColor];
-self.scanningBarcode.showScanCorner = YES;
 self.scanningBarcode.scanCornerColor = [UIColor greenColor];
+self.scanningBarcode.scanFrame = CGRectMake(60.0, 100.0, 80.0, 80.0);
 
-[self.scanningBarcode barcodeScanningWithFrame:CGRectMake(60.0, (CGRectGetHeight(self.view.bounds) - (CGRectGetWidth(self.view.bounds) - 60.0 * 2)) / 2, (CGRectGetWidth(self.view.bounds) - 60.0 * 2), (CGRectGetWidth(self.view.bounds) - 60.0 * 2)) view:self.view complete:^(NSString *scanResult) {
-
-NSLog(@"scanResult = %@", scanResult);
-
+// 开始扫描
+[self.scanningBarcode barcodeScanningStart:^(NSString *scanResult) {
+        NSLog(@"scanResult = %@", scanResult);
+        [[[UIAlertView alloc] initWithTitle:nil message:scanResult delegate:nil cancelButtonTitle:nil otherButtonTitles:@"ok", nil] show];
 }];
+
+// 结束扫描
+[self.scanningBarcode barcodeScanningCancel];
 ~~~
 
 # 扫描二维码效果图
@@ -48,6 +52,13 @@ UIImage *image = [SYBarcodeManager barcodeImageWithContent:@"https://github.com/
 
 
 # 修改完善
+* 20171020
+  * 版本号：2.0.0
+  * 功能优化
+    * 扫描方法优化
+    * 属性设置优化
+    * 扫描界面优化
+
 * 20170922
   * 版本号：1.1.0
   * 新增功能属性

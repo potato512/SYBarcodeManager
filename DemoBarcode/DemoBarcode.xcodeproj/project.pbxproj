@@ -15,6 +15,9 @@
 		A74ECDF91D0FB8A000370F1F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A74ECDF71D0FB8A000370F1F /* LaunchScreen.storyboard */; };
 		A74ECE041D0FB8A000370F1F /* DemoBarcodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A74ECE031D0FB8A000370F1F /* DemoBarcodeTests.m */; };
 		A74ECE0F1D0FB8A000370F1F /* DemoBarcodeUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = A74ECE0E1D0FB8A000370F1F /* DemoBarcodeUITests.m */; };
+		A7C625E81F99C41A00D04A54 /* ScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7C625E71F99C41A00D04A54 /* ScanViewController.m */; };
+		A7C625EB1F99C48700D04A54 /* SaveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7C625EA1F99C48700D04A54 /* SaveViewController.m */; };
+		A7C625EE1F99DC1600D04A54 /* SYBarcodeView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7C625ED1F99DC1600D04A54 /* SYBarcodeView.m */; };
 		A7D8B9D31F73ACDB005FF1C7 /* SYBarcodeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D8B9D21F73ACDB005FF1C7 /* SYBarcodeManager.m */; };
 /* End PBXBuildFile section */
 
@@ -52,6 +55,12 @@
 		A74ECE0A1D0FB8A000370F1F /* DemoBarcodeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DemoBarcodeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A74ECE0E1D0FB8A000370F1F /* DemoBarcodeUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoBarcodeUITests.m; sourceTree = "<group>"; };
 		A74ECE101D0FB8A000370F1F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A7C625E61F99C41A00D04A54 /* ScanViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScanViewController.h; sourceTree = "<group>"; };
+		A7C625E71F99C41A00D04A54 /* ScanViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScanViewController.m; sourceTree = "<group>"; };
+		A7C625E91F99C48700D04A54 /* SaveViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SaveViewController.h; sourceTree = "<group>"; };
+		A7C625EA1F99C48700D04A54 /* SaveViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SaveViewController.m; sourceTree = "<group>"; };
+		A7C625EC1F99DC1600D04A54 /* SYBarcodeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SYBarcodeView.h; sourceTree = "<group>"; };
+		A7C625ED1F99DC1600D04A54 /* SYBarcodeView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SYBarcodeView.m; sourceTree = "<group>"; };
 		A7D8B9D11F73ACDB005FF1C7 /* SYBarcodeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SYBarcodeManager.h; sourceTree = "<group>"; };
 		A7D8B9D21F73ACDB005FF1C7 /* SYBarcodeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SYBarcodeManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -108,6 +117,10 @@
 				A74ECDED1D0FB8A000370F1F /* AppDelegate.m */,
 				A74ECDEF1D0FB8A000370F1F /* ViewController.h */,
 				A74ECDF01D0FB8A000370F1F /* ViewController.m */,
+				A7C625E61F99C41A00D04A54 /* ScanViewController.h */,
+				A7C625E71F99C41A00D04A54 /* ScanViewController.m */,
+				A7C625E91F99C48700D04A54 /* SaveViewController.h */,
+				A7C625EA1F99C48700D04A54 /* SaveViewController.m */,
 				A7D8B9D01F73ACDB005FF1C7 /* SYBarcodeManager */,
 				A74ECDE91D0FB8A000370F1F /* Supporting Files */,
 			);
@@ -149,6 +162,8 @@
 			children = (
 				A7D8B9D11F73ACDB005FF1C7 /* SYBarcodeManager.h */,
 				A7D8B9D21F73ACDB005FF1C7 /* SYBarcodeManager.m */,
+				A7C625EC1F99DC1600D04A54 /* SYBarcodeView.h */,
+				A7C625ED1F99DC1600D04A54 /* SYBarcodeView.m */,
 			);
 			name = SYBarcodeManager;
 			path = ../../SYBarcodeManager;
@@ -221,7 +236,7 @@
 				TargetAttributes = {
 					A74ECDE51D0FB8A000370F1F = {
 						CreatedOnToolsVersion = 7.2.1;
-						DevelopmentTeam = 6CWC9A8AA5;
+						DevelopmentTeam = YA3584AU76;
 					};
 					A74ECDFE1D0FB8A000370F1F = {
 						CreatedOnToolsVersion = 7.2.1;
@@ -288,9 +303,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				A7D8B9D31F73ACDB005FF1C7 /* SYBarcodeManager.m in Sources */,
+				A7C625E81F99C41A00D04A54 /* ScanViewController.m in Sources */,
 				A74ECDF11D0FB8A000370F1F /* ViewController.m in Sources */,
+				A7C625EE1F99DC1600D04A54 /* SYBarcodeView.m in Sources */,
 				A74ECDEE1D0FB8A000370F1F /* AppDelegate.m in Sources */,
 				A74ECDEB1D0FB8A000370F1F /* main.m in Sources */,
+				A7C625EB1F99C48700D04A54 /* SaveViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -431,12 +449,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer: junjie cai (5BE779GQZQ)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: junjie cai (5BE779GQZQ)";
+				DEVELOPMENT_TEAM = YA3584AU76;
 				INFOPLIST_FILE = DemoBarcode/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vstecs.VSTOB;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "37dc1180-9d54-4386-bed4-4bf62a77a890";
+				PROVISIONING_PROFILE = "4dbf0f5e-ddc3-4457-b395-1a18ea472cbe";
+				PROVISIONING_PROFILE_SPECIFIER = VstEcsAllDeveloperProfile;
 			};
 			name = Debug;
 		};
@@ -446,12 +466,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer: junjie cai (5BE779GQZQ)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: junjie cai (5BE779GQZQ)";
+				DEVELOPMENT_TEAM = YA3584AU76;
 				INFOPLIST_FILE = DemoBarcode/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vstecs.VSTOB;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "37dc1180-9d54-4386-bed4-4bf62a77a890";
+				PROVISIONING_PROFILE = "4dbf0f5e-ddc3-4457-b395-1a18ea472cbe";
+				PROVISIONING_PROFILE_SPECIFIER = VstEcsAllDeveloperProfile;
 			};
 			name = Release;
 		};

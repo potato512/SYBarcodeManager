@@ -8,58 +8,57 @@
 
 #import "SYBarcodeManager.h"
 #import <AVFoundation/AVFoundation.h>
+#import "SYBarcodeView.h"
 
 typedef void (^ScanningComplete)(NSString *scanResult);
-//static ScanningComplete scanningComplete;
-
-static CGFloat const widthline = 3.0;
-static CGFloat const heightline = 20.0;
 
 typedef void (^SaveToPhotosAlbumComplete)(BOOL isSuccess);
 static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 
 @interface SYBarcodeManager () <AVCaptureMetadataOutputObjectsDelegate>
-
-@property (nonatomic, strong) UIView *scanView;
+    
+@property (nonatomic, assign) CGRect superFrame;
+@property (nonatomic, strong) SYBarcodeView *scanView;
 
 @property (nonatomic, strong) AVCaptureSession *avSession;
 @property (nonatomic, strong) AVCaptureVideoPreviewLayer *avLayer;
-
-@property (nonatomic, strong) UIImageView *cornerline01;
-@property (nonatomic, strong) UIImageView *cornerline02;
-@property (nonatomic, strong) UIImageView *cornerline03;
-@property (nonatomic, strong) UIImageView *cornerline04;
-@property (nonatomic, strong) UIImageView *cornerline05;
-@property (nonatomic, strong) UIImageView *cornerline06;
-@property (nonatomic, strong) UIImageView *cornerline07;
-@property (nonatomic, strong) UIImageView *cornerline08;
-@property (nonatomic, strong) UIImageView *scanline;
-
+    
 @property (nonatomic, copy) ScanningComplete scanningComplete;
 
 @end
 
 @implementation SYBarcodeManager
 
-
-- (instancetype)init
+- (instancetype)initWithFrame:(CGRect)frame view:(UIView *)superView
 {
     self = [super init];
     if (self)
     {
-        _showScanline = NO;
-        _scanlineColor = [[UIColor blackColor] colorWithAlphaComponent:1.0];
-        
-        _showScanCorner = NO;
-        _scanCornerColor = [[UIColor blackColor] colorWithAlphaComponent:0.3];
+        _maskColor = [[UIColor whiteColor] colorWithAlphaComponent:0.5];
+        _scanlineColor = [[UIColor greenColor] colorWithAlphaComponent:0.3];
+        _scanCornerColor = [[UIColor greenColor] colorWithAlphaComponent:1.0];
         
         _scanTimeDuration = 1.6;
         
-        _scanRadius = 0.0;
+        _alertMessage = @"未获取到摄像设备";
+        _alertTitle = @"知道了";
+        
+        self.superFrame = frame;
+        CGFloat size = ((frame.size.width > frame.size.height ? frame.size.height : frame.size.width) * 0.6);
+        self.scanFrame = CGRectMake((frame.size.width - size) / 2, (frame.size.width - size) / 2, size, size);
+        if (superView)
+        {
+            [superView addSubview:self.scanView];
+        }
     }
     return self;
 }
-
+    
+- (void)dealloc
+{
+    NSLog(@"%@ 被释放了...", [self class]);
+}
+    
 #pragma mark - 扫描二维码
 
 /// 退出扫描
@@ -71,75 +70,49 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
         [self.avLayer removeFromSuperlayer];
     }
     
-    [self scanlineAnimationStop];
+    self.scanView.hidden = YES;
 }
 
-/// 重新开始扫描
-- (void)barcodeScanningStart
+/// 开始扫描
+- (void)barcodeScanningStart:(void (^)(NSString *scanResult))complete
 {
-    if (self.avLayer.superlayer == nil)
-    {
-        if (self.scanView)
-        {
-            [self.scanView.layer insertSublayer:self.avLayer above:0];
-        }
-    }
-
-    // 动画扫描线
-    [self scanlineAnimationStart];
-    
-    // 开始捕获
-    [self.avSession startRunning];
-}
-
-/**
- *  扫描二维码
- *
- *  @param rect     扫描框frame属性
- *  @param view     扫描框父视图
- *  @param complete 扫描结果回调
- */
-- (void)barcodeScanningWithFrame:(CGRect)rect view:(UIView *)view complete:(void (^)(NSString *scanResult))complete
-{
-    if (view)
-    {
-        self.scanView.frame = rect;
-        [view addSubview:self.scanView];
-    }
-    // 圆角
-    self.scanView.layer.cornerRadius = self.scanRadius;
-    self.scanView.layer.masksToBounds = YES;
-    self.scanView.clipsToBounds = YES;
-    
-    // 扫描框的位置和大小
-    self.avLayer.frame = self.scanView.bounds;
-    if (self.scanView)
-    {
-        [self.scanView.layer insertSublayer:self.avLayer above:0];
-    }
-    
+    // 回调
     self.scanningComplete = [complete copy];
     
-    // 显示扫描线
-    [self scanlineAnimationStart];
+    // 显示扫描相机
+    if (self.avLayer.superlayer == nil)
+    {
+        // 扫描框的位置和大小
+        self.avLayer.frame = self.scanView.superview.bounds;
+        [self.scanView.superview.layer insertSublayer:self.avLayer above:0];
+        [self.scanView.superview bringSubviewToFront:self.scanView];
+    }
     
     // 开始捕获
     [self.avSession startRunning];
+    
+    self.scanView.hidden = NO;
+    [self.scanView scanLineStart];
 }
 
-- (UIView *)scanView
+#pragma mark - getter
+    
+#pragma mark 窗口
+    
+- (SYBarcodeView *)scanView
 {
     if (_scanView == nil)
     {
-        _scanView = [UIView new];
-        _scanView.backgroundColor = [UIColor clearColor];
+        _scanView = [[SYBarcodeView alloc] initWithFrame:self.superFrame];
     }
     return _scanView;
 }
 
+#pragma mark 扫描器
+    
 - (AVCaptureSession *)avSession
 {
-    if (!_avSession)
+    if (_avSession == nil)
     {
         // 获取摄像设备
         AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
@@ -147,7 +120,7 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
         if (device == nil)
         {
             // 设备无摄像时
-            [[[UIAlertView alloc] initWithTitle:nil message:@"未获取到摄像设备" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"知道了", nil] show];
+            [[[UIAlertView alloc] initWithTitle:nil message:self.alertMessage delegate:nil cancelButtonTitle:nil otherButtonTitles:self.alertTitle, nil] show];
             return nil;
         }
         
@@ -176,7 +149,7 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 
 - (AVCaptureVideoPreviewLayer *)avLayer
 {
-    if (!_avLayer)
+    if (_avLayer == nil)
     {
         _avLayer = [AVCaptureVideoPreviewLayer layerWithSession:self.avSession];
         _avLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
@@ -184,215 +157,35 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
     
     return _avLayer;
 }
-
-#pragma mark cornerline
-
-- (UIImageView *)cornerline01
-{
-    if (_cornerline01 == nil)
-    {
-        _cornerline01 = [[UIImageView alloc] init];
-    }
-    return _cornerline01;
-}
-
-- (UIImageView *)cornerline02
-{
-    if (_cornerline02 == nil)
-    {
-        _cornerline02 = [[UIImageView alloc] init];
-    }
-    return _cornerline02;
-}
-
-- (UIImageView *)cornerline03
-{
-    if (_cornerline03 == nil)
-    {
-        _cornerline03 = [[UIImageView alloc] init];
-    }
-    return _cornerline03;
-}
-
-- (UIImageView *)cornerline04
-{
-    if (_cornerline04 == nil)
-    {
-        _cornerline04 = [[UIImageView alloc] init];
-    }
-    return _cornerline04;
-}
-
-- (UIImageView *)cornerline05
-{
-    if (_cornerline05 == nil)
-    {
-        _cornerline05 = [[UIImageView alloc] init];
-    }
-    return _cornerline05;
-}
-
-- (UIImageView *)cornerline06
-{
-    if (_cornerline06 == nil)
-    {
-        _cornerline06 = [[UIImageView alloc] init];
-    }
-    return _cornerline06;
-}
-
-- (UIImageView *)cornerline07
-{
-    if (_cornerline07 == nil)
-    {
-        _cornerline07 = [[UIImageView alloc] init];
-    }
-    return _cornerline07;
-}
-
-- (UIImageView *)cornerline08
-{
-    if (_cornerline08 == nil)
-    {
-        _cornerline08 = [[UIImageView alloc] init];
-    }
-    return _cornerline08;
-}
-
-#pragma mark scanline
-
-- (UIImageView *)scanline
-{
-    if (_scanline == nil)
-    {
-        _scanline = [[UIImageView alloc] init];
-    }
-    return _scanline;
-}
-
-- (void)reloadline
-{
-    if (_showScanline)
-    {
-        if (self.scanline.superview == nil)
-        {
-            self.scanline.frame = CGRectMake(0.0, 0.0, self.scanView.frame.size.width, widthline);
-            
-            [self.scanView addSubview:self.scanline];
-        }
-        
-        self.scanline.backgroundColor = _scanlineColor;
-    }
     
-    if (_showScanCorner)
-    {
-        if (self.cornerline01.superview == nil)
-        {
-            self.cornerline01.frame = CGRectMake(0.0, 0.0, widthline, heightline);
-            self.cornerline02.frame = CGRectMake(0.0, 0.0, heightline, widthline);
-            self.cornerline03.frame = CGRectMake((self.scanView.frame.size.width - heightline), 0.0, heightline, widthline);
-            self.cornerline04.frame = CGRectMake((self.scanView.frame.size.width - widthline), 0.0, widthline, heightline);
-            self.cornerline05.frame = CGRectMake(0.0, (self.scanView.frame.size.height - heightline), widthline, heightline);
-            self.cornerline06.frame = CGRectMake(0.0, (self.scanView.frame.size.height - widthline), heightline, widthline);
-            self.cornerline07.frame = CGRectMake((self.scanView.frame.size.width - heightline), (self.scanView.frame.size.height - widthline), heightline, widthline);
-            self.cornerline08.frame = CGRectMake((self.scanView.frame.size.width - widthline), (self.scanView.frame.size.height - heightline), widthline, heightline);
-            
-            [self.scanView addSubview:self.cornerline01];
-            [self.scanView addSubview:self.cornerline02];
-            [self.scanView addSubview:self.cornerline03];
-            [self.scanView addSubview:self.cornerline04];
-            [self.scanView addSubview:self.cornerline05];
-            [self.scanView addSubview:self.cornerline06];
-            [self.scanView addSubview:self.cornerline07];
-            [self.scanView addSubview:self.cornerline08];
-        }
-        
-        self.cornerline01.backgroundColor = _scanCornerColor;
-        self.cornerline02.backgroundColor = _scanCornerColor;
-        self.cornerline03.backgroundColor = _scanCornerColor;
-        self.cornerline04.backgroundColor = _scanCornerColor;
-        self.cornerline05.backgroundColor = _scanCornerColor;
-        self.cornerline06.backgroundColor = _scanCornerColor;
-        self.cornerline07.backgroundColor = _scanCornerColor;
-        self.cornerline08.backgroundColor = _scanCornerColor;
-    }
+#pragma mark - setter
     
-    if (0.0 < self.scanRadius)
-    {
-        // 有圆角时
-        if (self.showScanCorner)
-        {
-            if (self.cornerline01.superview)
-            {
-                [self.cornerline01 removeFromSuperview];
-                [self.cornerline02 removeFromSuperview];
-                [self.cornerline03 removeFromSuperview];
-                [self.cornerline04 removeFromSuperview];
-                [self.cornerline05 removeFromSuperview];
-                [self.cornerline06 removeFromSuperview];
-                [self.cornerline07 removeFromSuperview];
-                [self.cornerline08 removeFromSuperview];
-            }
-        }
-    }
-    else
-    {
-        // 无圆角时
-        if (self.showScanCorner)
-        {
-            if (self.cornerline01.superview == nil)
-            {
-                [self.scanView addSubview:self.cornerline01];
-                [self.scanView addSubview:self.cornerline02];
-                [self.scanView addSubview:self.cornerline03];
-                [self.scanView addSubview:self.cornerline04];
-                [self.scanView addSubview:self.cornerline05];
-                [self.scanView addSubview:self.cornerline06];
-                [self.scanView addSubview:self.cornerline07];
-                [self.scanView addSubview:self.cornerline08];
-            }
-        }
-    }
+- (void)setScanFrame:(CGRect)scanFrame
+{
+    _scanFrame = scanFrame;
+    self.scanView.scanFrame = _scanFrame;
+    [self.scanView reloadBarcodeView];
+}
+    
+- (void)setMaskColor:(UIColor *)maskColor
+{
+    _maskColor = maskColor;
+    self.scanView.backgroundColor = _maskColor;
+    [self.scanView reloadBarcodeView];
+}
+    
+- (void)setScanCornerColor:(UIColor *)scanCornerColor
+{
+    _scanCornerColor = scanCornerColor;
+    self.scanView.cornerColor = _scanCornerColor;
+    [self.scanView reloadBarcodeView];
 }
 
-- (void)scanlineAnimationStart
+- (void)setScanlineColor:(UIColor *)scanlineColor
 {
-    [self reloadline];
-    
-    if (_showScanline)
-    {
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:_scanTimeDuration];
-        [UIView setAnimationRepeatCount:MAXFLOAT];
-        //
-        CGRect rectline = self.scanline.frame;
-        rectline.origin.y = (self.scanView.frame.size.height - widthline);
-        self.scanline.frame = rectline;
-        //
-        [UIView commitAnimations];
-    }
-}
-
-- (void)scanlineAnimationStop
-{
-    if (_showScanline)
-    {
-        if (self.scanline.superview)
-        {
-            [self.scanline removeFromSuperview];
-        }
-        if (self.cornerline01.superview)
-        {
-            [self.cornerline01 removeFromSuperview];
-            [self.cornerline02 removeFromSuperview];
-            [self.cornerline03 removeFromSuperview];
-            [self.cornerline04 removeFromSuperview];
-            [self.cornerline05 removeFromSuperview];
-            [self.cornerline06 removeFromSuperview];
-            [self.cornerline07 removeFromSuperview];
-            [self.cornerline08 removeFromSuperview];
-        }
-    }
+    _scanlineColor = scanlineColor;
+    self.scanView.scanline.backgroundColor = _scanlineColor;
+    [self.scanView reloadBarcodeView];
 }
 
 #pragma mark AVCaptureMetadataOutputObjectsDelegate
@@ -400,20 +193,20 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 // 通过代理方法获取扫描到的结果
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputMetadataObjects:(NSArray *)metadataObjects fromConnection:(AVCaptureConnection *)connection
 {
-    NSLog(@"%s",__func__);
+    NSLog(@"%s", __func__);
     
     if (metadataObjects.count > 0)
     {
         // [session stopRunning];
         AVMetadataMachineReadableCodeObject *metadataObject = [metadataObjects objectAtIndex: 0];
         // 输出扫描字符串
-        NSLog(@"metadataObject = %@，value = %@", metadataObject, metadataObject.stringValue);
+        NSLog(@"输出扫描字符串 = %@，value = %@", metadataObject, metadataObject.stringValue);
         
         // 停止扫描
         [self.avSession stopRunning];
         
         // 停止扫描线
-        [self scanlineAnimationStop];
+        [self.scanView scanLineStop];
         
         if (self.scanningComplete)
         {
