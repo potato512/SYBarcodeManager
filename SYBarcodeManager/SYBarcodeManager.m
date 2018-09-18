@@ -62,7 +62,7 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 #pragma mark - 扫描二维码
 
 /// 退出扫描
-- (void)barcodeScanningCancel
+- (void)QrcodeScanningCancel
 {
     [self.avSession stopRunning];
     if (self.avLayer.superlayer)
@@ -74,7 +74,7 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 }
 
 /// 开始扫描
-- (void)barcodeScanningStart:(void (^)(NSString *scanResult))complete
+- (void)QrcodeScanningStart:(void (^)(NSString *scanResult))complete
 {
     // 回调
     self.scanningComplete = [complete copy];
@@ -219,7 +219,7 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 #pragma mark - 生成二维码
 
 // 根据字符内容生成二维码图片CIImage
-+ (CIImage *)barcodeCIImageWithContent:(NSString *)content
++ (CIImage *)QrcodeCIImageWithContent:(NSString *)content
 {
     NSData *barCodeData = [content dataUsingEncoding:NSUTF8StringEncoding];
     // 创建filter
@@ -232,7 +232,7 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 }
 
 // 二维码图片UIImage
-+ (UIImage *)barcodeImageWithCIImage:(CIImage *)ciimage size:(CGFloat)size
++ (UIImage *)QrcodeImageWithCIImage:(CIImage *)ciimage size:(CGFloat)size
 {
     CGRect extent = CGRectIntegral(ciimage.extent);
     CGFloat scale = MIN(size / CGRectGetWidth(extent), size / CGRectGetHeight(extent));
@@ -260,7 +260,7 @@ void ProviderReleaseData (void *info, const void *data, size_t size)
 }
 
 /// 黑白二维码转成指定颜色
-+ (UIImage *)barcodeImageChangeColor:(UIImage *)image colorRed:(CGFloat)red colorGreen:(CGFloat)green colorBlue:(CGFloat)blue
++ (UIImage *)QrcodeImageChangeColor:(UIImage *)image colorRed:(CGFloat)red colorGreen:(CGFloat)green colorBlue:(CGFloat)blue
 {
     const int imageWidth = image.size.width;
     const int imageHeight = image.size.height;
@@ -307,19 +307,49 @@ void ProviderReleaseData (void *info, const void *data, size_t size)
 }
 
 /// 生成二维码（指定内容，指定大小，指定颜色）
-+ (UIImage *)barcodeImageWithContent:(NSString *)content size:(CGFloat)size colorRed:(CGFloat)red colorGreen:(CGFloat)green colorBlue:(CGFloat)blue
++ (UIImage *)QrcodeImageWithContent:(NSString *)content size:(CGFloat)size colorRed:(CGFloat)red colorGreen:(CGFloat)green colorBlue:(CGFloat)blue
 {
-    CIImage *ciimage = [self barcodeCIImageWithContent:content];
-    UIImage *image = [self barcodeImageWithCIImage:ciimage size:size];
-    image = [self barcodeImageChangeColor:image colorRed:red colorGreen:green colorBlue:blue];
+    CIImage *ciimage = [self QrcodeCIImageWithContent:content];
+    UIImage *image = [self QrcodeImageWithCIImage:ciimage size:size];
+    image = [self QrcodeImageChangeColor:image colorRed:red colorGreen:green colorBlue:blue];
     return image;
 }
 
 /// 生成二维码（指定内容，指定大小，透明色）
-+ (UIImage *)barcodeImageWithContent:(NSString *)content size:(CGFloat)size
++ (UIImage *)QrcodeImageWithContent:(NSString *)content size:(CGFloat)size
 {
-    UIImage *image = [self barcodeImageWithContent:content size:size colorRed:0.0 colorGreen:0.0 colorBlue:0.0];
+    UIImage *image = [self QrcodeImageWithContent:content size:size colorRed:0.0 colorGreen:0.0 colorBlue:0.0];
     return image;
+}
+
+#pragma mark - 条形码
+
+/// 生成条形码 条形码尺寸大小
++ (UIImage *)BarcodeImageWithContent:(NSString *)content size:(CGSize)size
+{
+    CIFilter *qrFilter = [CIFilter filterWithName:@"CICode128BarcodeGenerator"];
+    NSData *contentData = [content dataUsingEncoding:NSUTF8StringEncoding];
+    [qrFilter setValue:contentData forKey:@"inputMessage"];
+    [qrFilter setValue:@(0.00) forKey:@"inputQuietSpace"];
+    CIImage *image = qrFilter.outputImage;
+    
+    CGRect integralRect = CGRectIntegral(image.extent);
+    CGFloat scale = MIN(size.width / CGRectGetWidth(integralRect), size.height / CGRectGetHeight(integralRect));
+    
+    size_t width = CGRectGetWidth(integralRect)*scale;
+    size_t height = CGRectGetHeight(integralRect)*scale;
+    CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceGray();
+    CGContextRef bitmapRef = CGBitmapContextCreate(nil, width, height, 8, 0, colorSpaceRef, (CGBitmapInfo)kCGImageAlphaNone);
+    CIContext *context = [CIContext contextWithOptions:nil];
+    CGImageRef bitmapImage = [context createCGImage:image fromRect:integralRect];
+    CGContextSetInterpolationQuality(bitmapRef, kCGInterpolationNone);
+    CGContextScaleCTM(bitmapRef, scale, scale);
+    CGContextDrawImage(bitmapRef, integralRect, bitmapImage);
+    
+    CGImageRef scaledImage = CGBitmapContextCreateImage(bitmapRef);
+    CGContextRelease(bitmapRef);
+    CGImageRelease(bitmapImage);
+    return [UIImage imageWithCGImage:scaledImage];
 }
 
 @end

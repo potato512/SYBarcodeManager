@@ -50,12 +50,10 @@
     
     UIImageView *imageview01 = [[UIImageView alloc] initWithFrame:CGRectMake(10.0, 10.0, width, height)];
     [self.view addSubview:imageview01];
-//    imageview01.backgroundColor = [UIColor redColor];
     imageview01.tag = 1000;
     
     UIImageView *imageview02 = [[UIImageView alloc] initWithFrame:CGRectMake(10.0, (CGRectGetHeight(imageview01.bounds) + 10.0 + 10.0), width, height)];
     [self.view addSubview:imageview02];
-//    imageview02.backgroundColor = [UIColor grayColor];
     imageview02.tag = 2000;
 }
     
@@ -76,15 +74,14 @@
 {
     CGFloat width = (CGRectGetWidth(self.view.bounds) - 10.0 * 2);
     
-    UIImage *image01 = [SYBarcodeManager barcodeImageWithContent:@"https://github.com/potato512/BarcodeManager" size:width colorRed:10.0 colorGreen:100.0 colorBlue:50.0];
-    
-    UIImage *image02 = [SYBarcodeManager barcodeImageWithContent:@"https://github.com/potato512/BarcodeManager" size:width];
-    
+    UIImage *imageQrcode = [SYBarcodeManager QrcodeImageWithContent:@"https://github.com/potato512/BarcodeManager" size:width colorRed:10.0 colorGreen:100.0 colorBlue:50.0];
+//    UIImage *imageQrcode = [SYBarcodeManager QrcodeImageWithContent:@"https://github.com/potato512/BarcodeManager" size:width];
     UIImageView *imageview01 = (UIImageView *)[self.view viewWithTag:1000];
-    imageview01.image = image01;
+    imageview01.image = imageQrcode;
     
+    UIImage *imageBarcode = [SYBarcodeManager BarcodeImageWithContent:@"https://github.com/potato512/BarcodeManager" size:CGSizeMake(width, width)];
     UIImageView *imageview02 = (UIImageView *)[self.view viewWithTag:2000];
-    imageview02.image = image02;
+    imageview02.image = imageBarcode;
 }
 
 @end

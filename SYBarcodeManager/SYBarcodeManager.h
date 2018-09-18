@@ -33,17 +33,22 @@
 #pragma mark - 扫描二维码
 
 /// 退出扫描
-- (void)barcodeScanningCancel;
+- (void)QrcodeScanningCancel;
 
 /// 开始扫描
-- (void)barcodeScanningStart:(void (^)(NSString *scanResult))complete;
+- (void)QrcodeScanningStart:(void (^)(NSString *scanResult))complete;
 
 #pragma mark - 生成二维码
 
 /// 生成二维码（指定内容，指定大小，指定颜色）
-+ (UIImage *)barcodeImageWithContent:(NSString *)content size:(CGFloat)size colorRed:(CGFloat)red colorGreen:(CGFloat)green colorBlue:(CGFloat)blue;
++ (UIImage *)QrcodeImageWithContent:(NSString *)content size:(CGFloat)size colorRed:(CGFloat)red colorGreen:(CGFloat)green colorBlue:(CGFloat)blue;
 
 /// 生成二维码（指定内容，指定大小，透明色）
-+ (UIImage *)barcodeImageWithContent:(NSString *)content size:(CGFloat)size;
++ (UIImage *)QrcodeImageWithContent:(NSString *)content size:(CGFloat)size;
+
+#pragma mark - 条形码
+
+/// 生成条形码 条形码尺寸大小
++ (UIImage *)BarcodeImageWithContent:(NSString *)content size:(CGSize)size;
 
 @end

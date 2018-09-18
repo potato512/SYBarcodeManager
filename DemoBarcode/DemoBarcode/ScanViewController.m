@@ -85,7 +85,7 @@
         
         self.scanningBarcode.scanFrame = CGRectMake(100.0, (CGRectGetHeight(self.view.bounds) - (CGRectGetWidth(self.view.bounds) - 100.0 * 2)) / 2, (CGRectGetWidth(self.view.bounds) - 100.0 * 2), (CGRectGetWidth(self.view.bounds) - 100.0 * 2));
     }
-    [self.scanningBarcode barcodeScanningStart:^(NSString *scanResult) {
+    [self.scanningBarcode QrcodeScanningStart:^(NSString *scanResult) {
         NSLog(@"scanResult = %@", scanResult);
         [[[UIAlertView alloc] initWithTitle:nil message:scanResult delegate:nil cancelButtonTitle:nil otherButtonTitles:@"ok", nil] show];
     }];
@@ -93,12 +93,12 @@
 
 - (void)cancelClick:(UIBarButtonItem *)item
 {
-    [self.scanningBarcode barcodeScanningCancel];
+    [self.scanningBarcode QrcodeScanningCancel];
 }
 
 - (void)reloadClick:(UIBarButtonItem *)item
 {
-    [self.scanningBarcode barcodeScanningStart:^(NSString *scanResult) {
+    [self.scanningBarcode QrcodeScanningStart:^(NSString *scanResult) {
         NSLog(@"scanResult = %@", scanResult);
         [[[UIAlertView alloc] initWithTitle:nil message:scanResult delegate:nil cancelButtonTitle:nil otherButtonTitles:@"ok", nil] show];
     }];
