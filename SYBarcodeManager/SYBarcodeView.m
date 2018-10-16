@@ -24,8 +24,7 @@ static CGFloat const heightline = 5.0;
     self = [super initWithFrame:frame];
     if (self)
     {
-        self.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-        self.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.5];
+        self.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.3];
         self.opaque = NO;
         
         CGFloat size = ((frame.size.width > frame.size.height ? frame.size.height : frame.size.width) * 0.6);
@@ -101,7 +100,7 @@ static CGFloat const heightline = 5.0;
     
     // 位置
     self.scanline.frame = CGRectMake((self.scanFrame.origin.x + originXLine), self.scanFrame.origin.y, (self.scanFrame.size.width - originXLine * 2), heightline);
-    [self scanLineAnimation];
+    [self startTimer];
 }
    
 - (void)reloadBarcodeView
@@ -109,6 +108,8 @@ static CGFloat const heightline = 5.0;
     [self addScanView:self.frame];
     [self addScanLine];
     [self addScanCorner];
+    //
+    self.label.frame = CGRectMake(self.scanFrame.origin.x, (self.scanFrame.origin.y + self.scanFrame.size.height), self.scanFrame.size.width, 40.0f);
 }
 
 - (void)scanLineAnimation
@@ -117,35 +118,24 @@ static CGFloat const heightline = 5.0;
     CGFloat originYLine = self.scanline.frame.origin.y;
     if (originYLine == self.scanFrame.origin.y) {
         // 从上到下
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:_scanTimeDuration];
-        [UIView setAnimationRepeatCount:MAXFLOAT];
-        CGRect rectLine = self.scanline.frame;
-        rectLine.origin.y = (self.scanFrame.origin.y + self.scanFrame.size.height - heightline);
-        self.scanline.frame = rectLine;
-        [UIView commitAnimations];
+        [UIView animateWithDuration:_scanTimeDuration animations:^{
+            CGRect rectLine = self.scanline.frame;
+            rectLine.origin.y = (self.scanFrame.origin.y + self.scanFrame.size.height - heightline);
+            self.scanline.frame = rectLine;
+        }];
     } else {
         // 从下到上
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:_scanTimeDuration];
-        [UIView setAnimationRepeatCount:MAXFLOAT];
-        CGRect rectLine = self.scanline.frame;
-        rectLine.origin.y = self.scanFrame.origin.y;
-        self.scanline.frame = rectLine;
-        [UIView commitAnimations];
-    }
-    
-    if (self.timer == nil) {
-        self.timer = [NSTimer scheduledTimerWithTimeInterval:(_scanTimeDuration - 0.1) target:self selector:@selector(scanLineAnimation) userInfo:nil repeats: YES];
+        [UIView animateWithDuration:_scanTimeDuration animations:^{
+            CGRect rectLine = self.scanline.frame;
+            rectLine.origin.y = self.scanFrame.origin.y;
+            self.scanline.frame = rectLine;
+        }];
     }
 }
 
 - (void)scanLineStop
 {
-    if ([self.timer isValid]) {
-        [self.timer invalidate];
-        self.timer = nil;
-    }
+    [self stopTimer];
     
     CFTimeInterval pausedTime = [self.scanline.layer convertTime:CACurrentMediaTime() fromLayer:nil];
     self.scanline.layer.speed = 0.0;
@@ -154,7 +144,7 @@ static CGFloat const heightline = 5.0;
 
 - (void)scanLineStart
 {
-    [self scanLineAnimation];
+    [self startTimer];
     
     CFTimeInterval pausedTime = [self.scanline.layer timeOffset];
     self.scanline.layer.speed = 1.0;
@@ -162,6 +152,38 @@ static CGFloat const heightline = 5.0;
     self.scanline.layer.beginTime = 0.0;
     CFTimeInterval timeSincePause = [self.scanline.layer convertTime:CACurrentMediaTime() fromLayer:nil] - pausedTime;
     self.scanline.layer.beginTime = timeSincePause;
+}
+
+#pragma mark - 定时器
+
+- (void)startTimer
+{
+    if (self.timer == nil) {
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:_scanTimeDuration target:self selector:@selector(scanLineAnimation) userInfo:nil repeats: YES];
+    }
+}
+
+- (void)stopTimer
+{
+    if ([self.timer isValid]) {
+        [self.timer invalidate];
+        self.timer = nil;
+    }
+}
+
+#pragma mark - 提示标签
+
+- (UILabel *)label
+{
+    if (_label == nil) {
+        _label = [[UILabel alloc] init];
+        [self addSubview:_label];
+        _label.backgroundColor = [UIColor clearColor];
+        _label.textAlignment = NSTextAlignmentCenter;
+        _label.textColor = [[UIColor whiteColor] colorWithAlphaComponent:0.5];
+        _label.font = [UIFont systemFontOfSize:12.0];
+    }
+    return _label;
 }
 
 @end

@@ -55,6 +55,7 @@
     {
         self.scanningBarcode.maskColor = [UIColor clearColor];
         self.scanningBarcode.scanCornerColor = [UIColor greenColor];
+        self.scanningBarcode.scanlineImage = [UIImage imageNamed:@"line"];
         
         self.scanningBarcode.scanFrame = CGRectMake(60.0, (CGRectGetHeight(self.view.bounds) - (CGRectGetWidth(self.view.bounds) - 60.0 * 2)) / 2, (CGRectGetWidth(self.view.bounds) - 60.0 * 2), (CGRectGetWidth(self.view.bounds) - 60.0 * 2));
     }

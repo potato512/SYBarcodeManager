@@ -19,7 +19,6 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
     
 @property (nonatomic, assign) CGRect superFrame;
 @property (nonatomic, strong) SYBarcodeView *scanView;
-@property (nonatomic, strong) UILabel *label;
 
 @property (nonatomic, strong) AVCaptureSession *avSession;
 @property (nonatomic, strong) AVCaptureVideoPreviewLayer *avLayer;
@@ -34,9 +33,7 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 {
     self = [super init];
     if (self)
-    {
-        _maskColor = [UIColor colorWithWhite:0.0 alpha:0.3];// [[UIColor whiteColor] colorWithAlphaComponent:0.5];
-        
+    {        
         _alertMessage = @"未获取到摄像设备";
         _alertTitle = @"知道了";
         
@@ -49,9 +46,7 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
         {
             [superView addSubview:self.scanView];
         }
-        
-        self.scanView.backgroundColor = [UIColor greenColor];
-        self.label.backgroundColor = [UIColor purpleColor];
+        self.scanView.label.text = _message;
     }
     return self;
 }
@@ -89,11 +84,7 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
         self.scanView.superview.clipsToBounds = YES;
         self.scanView.superview.layer.masksToBounds = YES;
     }
-    if (self.label.superview == nil) {
-        [self.scanView.superview addSubview:self.label];
-        self.label.text = _message;
-        self.label.frame = CGRectMake(self.scanFrame.origin.x, (self.scanFrame.origin.y + self.scanFrame.size.height), self.scanFrame.size.width, 40.0f);
-    }
+    
     // 开始捕获
     [self.avSession startRunning];
     [self.scanView scanLineStart];
@@ -128,18 +119,6 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 }
 
 #pragma mark - getter
-
-- (UILabel *)label
-{
-    if (_label == nil) {
-        _label = [[UILabel alloc] init];
-        _label.backgroundColor = [UIColor clearColor];
-        _label.textAlignment = NSTextAlignmentCenter;
-        _label.textColor = [[UIColor whiteColor] colorWithAlphaComponent:0.5];
-        _label.font = [UIFont systemFontOfSize:11.0];
-    }
-    return _label;
-}
 
 #pragma mark 窗口
     
@@ -243,7 +222,7 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 - (void)setMessage:(NSString *)message
 {
     _message = message;
-    self.label.text = _message;
+    self.scanView.label.text = _message;
 }
 
 #pragma mark AVCaptureMetadataOutputObjectsDelegate

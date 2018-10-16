@@ -15,21 +15,27 @@
 ~~~ javascript
 // 实例化
 self.scanningBarcode = [[SYBarcodeManager alloc] initWithFrame:self.view.bounds view:self.view];
+~~~ 
 
+~~~ javascript
 // 属性设置
-self.scanningBarcode.maskColor = [UIColor orangeColor];
-self.scanningBarcode.scanlineColor = [UIColor redColor];
-self.scanningBarcode.scanCornerColor = [UIColor greenColor];
-self.scanningBarcode.scanFrame = CGRectMake(60.0, 100.0, 80.0, 80.0);
+self.scanningBarcode.maskColor = [UIColor clearColor]; // 遮罩层颜色
+self.scanningBarcode.scanCornerColor = [UIColor greenColor]; // 四角标颜色
+self.scanningBarcode.scanlineImage = [UIImage imageNamed:@"line"]; // 扫描线图标
+self.scanningBarcode.scanFrame = CGRectMake(60.0, 100.0, 80.0, 80.0); // 扫描识别区域
+~~~ 
 
+~~~ javascript
 // 开始扫描
-[self.scanningBarcode barcodeScanningStart:^(NSString *scanResult) {
+[self.scanningBarcode QrcodeScanningStart:^(NSString *scanResult) {
         NSLog(@"scanResult = %@", scanResult);
         [[[UIAlertView alloc] initWithTitle:nil message:scanResult delegate:nil cancelButtonTitle:nil otherButtonTitles:@"ok", nil] show];
 }];
+~~~ 
 
+~~~ javascript
 // 结束扫描
-[self.scanningBarcode barcodeScanningCancel];
+[self.scanningBarcode QrcodeScanningCancel];
 ~~~
 
 # 扫描二维码效果图
@@ -58,7 +64,7 @@ UIImage *image = [SYBarcodeManager barcodeImageWithContent:@"https://github.com/
 
 # 修改完善
 * 20181016
-  * 版本号：2.0.2
+  * 版本号：2.1.0
   * 功能完善
     * 扫描线条改成图标
     * 扫描线条动画改成上下往返

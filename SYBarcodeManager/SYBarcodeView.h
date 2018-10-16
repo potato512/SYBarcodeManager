@@ -31,4 +31,7 @@
 /// 扫描线动画时间，默认1.6秒
 @property (nonatomic, assign) NSTimeInterval scanTimeDuration;
 
+/// 提示语
+@property (nonatomic, strong) UILabel *label;
+
 @end
