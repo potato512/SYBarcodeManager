@@ -19,9 +19,9 @@
 
 /// 遮罩层颜色，默认半透明
 @property (nonatomic, strong) UIColor *maskColor;
-/// 扫描线颜色，默认绿色
-@property (nonatomic, strong) UIColor *scanlineColor;
-/// 角线颜色，默认绿色
+/// 扫描线图标
+@property (nonatomic, strong) UIImage *scanlineImage;
+/// 角线颜色，默认橙色
 @property (nonatomic, strong) UIColor *scanCornerColor;
     
 /// 扫描线动画时间，默认1.6秒
@@ -29,6 +29,9 @@
 
 @property (nonatomic, strong) NSString *alertMessage;
 @property (nonatomic, strong) NSString *alertTitle;
+
+/// 扫描提示语（未设置时使用默认值）
+@property (nonatomic, strong) NSString *message;
     
 #pragma mark - 扫描二维码
 
@@ -37,6 +40,16 @@
 
 /// 开始扫描
 - (void)QrcodeScanningStart:(void (^)(NSString *scanResult))complete;
+
+#pragma mark - 长按识别二维码
+
+/**
+ 长按等识别图片二维码
+ 
+ @param image 二维码图片
+ @return 识别结果
+ */
+- (NSString *)QRCodeFromImage:(UIImage *)image;
 
 #pragma mark - 生成二维码
 

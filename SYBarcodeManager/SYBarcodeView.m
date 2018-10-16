@@ -8,7 +8,14 @@
 
 #import "SYBarcodeView.h"
 
-static CGFloat const heightline = 3.0;
+static CGFloat const originXLine = 5.0;
+static CGFloat const heightline = 5.0;
+
+@interface SYBarcodeView ()
+
+@property (nonatomic, strong) NSTimer *timer;
+
+@end
 
 @implementation SYBarcodeView
 
@@ -17,13 +24,14 @@ static CGFloat const heightline = 3.0;
     self = [super initWithFrame:frame];
     if (self)
     {
+        self.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
         self.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.5];
         self.opaque = NO;
         
         CGFloat size = ((frame.size.width > frame.size.height ? frame.size.height : frame.size.width) * 0.6);
         _scanFrame = CGRectMake((frame.size.width - size) / 2, (frame.size.width - size) / 2, size, size);
         
-        _cornerColor = [[UIColor greenColor] colorWithAlphaComponent:1.0];
+        _cornerColor = [[UIColor orangeColor] colorWithAlphaComponent:1.0];
         _scanTimeDuration = 1.6;
     }
     return self;
@@ -50,7 +58,9 @@ static CGFloat const heightline = 3.0;
     [[UIColor clearColor] setFill];
     UIRectFill(clearIntersection);
 }
-    
+
+#pragma mark - 扫描区域
+
 // 设置四个角线
 - (void)addScanCorner
 {
@@ -68,29 +78,30 @@ static CGFloat const heightline = 3.0;
     CGContextStrokeLineSegments(ctx, belowLeftPoints, 4);
     CGContextStrokeLineSegments(ctx, belowRightPoints, 4);
 }
-  
+
+#pragma mark - 扫描线
+
+- (UIImageView *)scanline
+{
+    if (_scanline == nil) {
+        _scanline = [[UIImageView alloc] initWithFrame:CGRectZero];
+        _scanline.backgroundColor = [UIColor clearColor];
+        _scanline.image = [UIImage imageNamed:@"scanner_line"];
+    }
+    return _scanline;
+}
+
 // 设置扫描线
 - (void)addScanLine
 {
-    if (self.scanline == nil)
+    if (self.scanline.superview == nil)
     {
-        self.scanline = [[UIImageView alloc] initWithFrame:CGRectZero];
         [self addSubview:self.scanline];
-        _scanline.backgroundColor = [[UIColor greenColor] colorWithAlphaComponent:0.3];
     }
     
     // 位置
-    self.scanline.frame = CGRectMake(self.scanFrame.origin.x, self.scanFrame.origin.y, self.scanFrame.size.width, heightline);
-    // 动画
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:_scanTimeDuration];
-    [UIView setAnimationRepeatCount:MAXFLOAT];
-    //
-    CGRect rectline = self.scanline.frame;
-    rectline.origin.y = (self.scanFrame.origin.y + self.scanFrame.size.height - heightline);
-    self.scanline.frame = rectline;
-    //
-    [UIView commitAnimations];
+    self.scanline.frame = CGRectMake((self.scanFrame.origin.x + originXLine), self.scanFrame.origin.y, (self.scanFrame.size.width - originXLine * 2), heightline);
+    [self scanLineAnimation];
 }
    
 - (void)reloadBarcodeView
@@ -99,9 +110,43 @@ static CGFloat const heightline = 3.0;
     [self addScanLine];
     [self addScanCorner];
 }
+
+- (void)scanLineAnimation
+{
+    // 动画
+    CGFloat originYLine = self.scanline.frame.origin.y;
+    if (originYLine == self.scanFrame.origin.y) {
+        // 从上到下
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:_scanTimeDuration];
+        [UIView setAnimationRepeatCount:MAXFLOAT];
+        CGRect rectLine = self.scanline.frame;
+        rectLine.origin.y = (self.scanFrame.origin.y + self.scanFrame.size.height - heightline);
+        self.scanline.frame = rectLine;
+        [UIView commitAnimations];
+    } else {
+        // 从下到上
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:_scanTimeDuration];
+        [UIView setAnimationRepeatCount:MAXFLOAT];
+        CGRect rectLine = self.scanline.frame;
+        rectLine.origin.y = self.scanFrame.origin.y;
+        self.scanline.frame = rectLine;
+        [UIView commitAnimations];
+    }
     
+    if (self.timer == nil) {
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:(_scanTimeDuration - 0.1) target:self selector:@selector(scanLineAnimation) userInfo:nil repeats: YES];
+    }
+}
+
 - (void)scanLineStop
 {
+    if ([self.timer isValid]) {
+        [self.timer invalidate];
+        self.timer = nil;
+    }
+    
     CFTimeInterval pausedTime = [self.scanline.layer convertTime:CACurrentMediaTime() fromLayer:nil];
     self.scanline.layer.speed = 0.0;
     self.scanline.layer.timeOffset = pausedTime;
@@ -109,6 +154,8 @@ static CGFloat const heightline = 3.0;
 
 - (void)scanLineStart
 {
+    [self scanLineAnimation];
+    
     CFTimeInterval pausedTime = [self.scanline.layer timeOffset];
     self.scanline.layer.speed = 1.0;
     self.scanline.layer.timeOffset = 0.0;
@@ -116,5 +163,5 @@ static CGFloat const heightline = 3.0;
     CFTimeInterval timeSincePause = [self.scanline.layer convertTime:CACurrentMediaTime() fromLayer:nil] - pausedTime;
     self.scanline.layer.beginTime = timeSincePause;
 }
-    
+
 @end

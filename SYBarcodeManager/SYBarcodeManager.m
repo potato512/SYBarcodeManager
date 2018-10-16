@@ -19,6 +19,7 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
     
 @property (nonatomic, assign) CGRect superFrame;
 @property (nonatomic, strong) SYBarcodeView *scanView;
+@property (nonatomic, strong) UILabel *label;
 
 @property (nonatomic, strong) AVCaptureSession *avSession;
 @property (nonatomic, strong) AVCaptureVideoPreviewLayer *avLayer;
@@ -34,14 +35,12 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
     self = [super init];
     if (self)
     {
-        _maskColor = [[UIColor whiteColor] colorWithAlphaComponent:0.5];
-        _scanlineColor = [[UIColor greenColor] colorWithAlphaComponent:0.3];
-        _scanCornerColor = [[UIColor greenColor] colorWithAlphaComponent:1.0];
-        
-        _scanTimeDuration = 1.6;
+        _maskColor = [UIColor colorWithWhite:0.0 alpha:0.3];// [[UIColor whiteColor] colorWithAlphaComponent:0.5];
         
         _alertMessage = @"未获取到摄像设备";
         _alertTitle = @"知道了";
+        
+        _message = @"将二维码放入框内，即可自动扫描";
         
         self.superFrame = frame;
         CGFloat size = ((frame.size.width > frame.size.height ? frame.size.height : frame.size.width) * 0.6);
@@ -50,6 +49,9 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
         {
             [superView addSubview:self.scanView];
         }
+        
+        self.scanView.backgroundColor = [UIColor greenColor];
+        self.label.backgroundColor = [UIColor purpleColor];
     }
     return self;
 }
@@ -65,12 +67,9 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 - (void)QrcodeScanningCancel
 {
     [self.avSession stopRunning];
-    if (self.avLayer.superlayer)
-    {
-        [self.avLayer removeFromSuperlayer];
-    }
     
-    self.scanView.hidden = YES;
+    self.scanningComplete = nil;
+    [self.scanView scanLineStop];
 }
 
 /// 开始扫描
@@ -86,17 +85,62 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
         self.avLayer.frame = self.scanView.superview.bounds;
         [self.scanView.superview.layer insertSublayer:self.avLayer above:0];
         [self.scanView.superview bringSubviewToFront:self.scanView];
+        
+        self.scanView.superview.clipsToBounds = YES;
+        self.scanView.superview.layer.masksToBounds = YES;
     }
-    
+    if (self.label.superview == nil) {
+        [self.scanView.superview addSubview:self.label];
+        self.label.text = _message;
+        self.label.frame = CGRectMake(self.scanFrame.origin.x, (self.scanFrame.origin.y + self.scanFrame.size.height), self.scanFrame.size.width, 40.0f);
+    }
     // 开始捕获
     [self.avSession startRunning];
-    
-    self.scanView.hidden = NO;
     [self.scanView scanLineStart];
 }
 
+#pragma mark - 长按识别二维码
+
+/**
+ 长按等识别图片二维码
+
+ @param image 二维码图片
+ @return 识别结果
+ */
+- (NSString *)QRCodeFromImage:(UIImage *)image
+{
+    NSData *data = UIImagePNGRepresentation(image);
+    CIImage *ciimage = [CIImage imageWithData:data];
+    if (ciimage) {
+        CIDetector *qrDetector = [CIDetector detectorOfType:CIDetectorTypeQRCode context:[CIContext contextWithOptions:@{kCIContextUseSoftwareRenderer:@(YES)}] options:@{CIDetectorAccuracy : CIDetectorAccuracyHigh}];
+        NSArray *resultArr = [qrDetector featuresInImage:ciimage];
+        if (resultArr.count > 0) {
+            CIFeature *feature = resultArr[0];
+            CIQRCodeFeature *qrFeature = (CIQRCodeFeature *)feature;
+            NSString *result = qrFeature.messageString;
+            return result;
+        } else {
+            return nil;
+        }
+    } else {
+        return nil;
+    }
+}
+
 #pragma mark - getter
-    
+
+- (UILabel *)label
+{
+    if (_label == nil) {
+        _label = [[UILabel alloc] init];
+        _label.backgroundColor = [UIColor clearColor];
+        _label.textAlignment = NSTextAlignmentCenter;
+        _label.textColor = [[UIColor whiteColor] colorWithAlphaComponent:0.5];
+        _label.font = [UIFont systemFontOfSize:11.0];
+    }
+    return _label;
+}
+
 #pragma mark 窗口
     
 - (SYBarcodeView *)scanView
@@ -141,7 +185,12 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
         [_avSession addOutput:output];
         
         // 设置扫码支持的编码格式(如下设置条形码和二维码兼容)
-        output.metadataObjectTypes = @[AVMetadataObjectTypeQRCode, AVMetadataObjectTypeEAN13Code, AVMetadataObjectTypeEAN8Code, AVMetadataObjectTypeCode128Code];
+//        output.metadataObjectTypes = @[AVMetadataObjectTypeQRCode, AVMetadataObjectTypeEAN13Code, AVMetadataObjectTypeEAN8Code, AVMetadataObjectTypeUPCECode, AVMetadataObjectTypeCode39Code, AVMetadataObjectTypeCode39Mod43Code, AVMetadataObjectTypeCode93Code, AVMetadataObjectTypeCode128Code, AVMetadataObjectTypePDF417Code];
+        output.metadataObjectTypes = @[AVMetadataObjectTypeQRCode];
+        
+        // 调整扫描位置（取值范围{0,0,1,1}，且取反{y,x,height,width}）
+        CGSize size = [UIScreen mainScreen].bounds.size;
+        output.rectOfInterest = CGRectMake(_scanFrame.origin.y / size.height, _scanFrame.origin.x / size.width, _scanFrame.size.height / size.height, _scanFrame.size.width / size.width);
     }
     
     return _avSession;
@@ -153,6 +202,9 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
     {
         _avLayer = [AVCaptureVideoPreviewLayer layerWithSession:self.avSession];
         _avLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+        
+        //
+        [_avLayer setAffineTransform:CGAffineTransformMakeScale(1.5, 1.5)];
     }
     
     return _avLayer;
@@ -181,11 +233,17 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
     [self.scanView reloadBarcodeView];
 }
 
-- (void)setScanlineColor:(UIColor *)scanlineColor
+-(void)setScanlineImage:(UIImage *)scanlineImage
 {
-    _scanlineColor = scanlineColor;
-    self.scanView.scanline.backgroundColor = _scanlineColor;
+    _scanlineImage = scanlineImage;
+    self.scanView.scanline.image = _scanlineImage;
     [self.scanView reloadBarcodeView];
+}
+
+- (void)setMessage:(NSString *)message
+{
+    _message = message;
+    self.label.text = _message;
 }
 
 #pragma mark AVCaptureMetadataOutputObjectsDelegate

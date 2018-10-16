@@ -15,6 +15,7 @@
 		A74ECDF91D0FB8A000370F1F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A74ECDF71D0FB8A000370F1F /* LaunchScreen.storyboard */; };
 		A74ECE041D0FB8A000370F1F /* DemoBarcodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A74ECE031D0FB8A000370F1F /* DemoBarcodeTests.m */; };
 		A74ECE0F1D0FB8A000370F1F /* DemoBarcodeUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = A74ECE0E1D0FB8A000370F1F /* DemoBarcodeUITests.m */; };
+		A773C67A2175DAB90047095B /* scanner_line@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A773C6792175DAB90047095B /* scanner_line@2x.png */; };
 		A7C625E81F99C41A00D04A54 /* ScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7C625E71F99C41A00D04A54 /* ScanViewController.m */; };
 		A7C625EB1F99C48700D04A54 /* SaveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7C625EA1F99C48700D04A54 /* SaveViewController.m */; };
 		A7C625EE1F99DC1600D04A54 /* SYBarcodeView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7C625ED1F99DC1600D04A54 /* SYBarcodeView.m */; };
@@ -55,6 +56,7 @@
 		A74ECE0A1D0FB8A000370F1F /* DemoBarcodeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DemoBarcodeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A74ECE0E1D0FB8A000370F1F /* DemoBarcodeUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoBarcodeUITests.m; sourceTree = "<group>"; };
 		A74ECE101D0FB8A000370F1F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A773C6792175DAB90047095B /* scanner_line@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "scanner_line@2x.png"; sourceTree = "<group>"; };
 		A7C625E61F99C41A00D04A54 /* ScanViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScanViewController.h; sourceTree = "<group>"; };
 		A7C625E71F99C41A00D04A54 /* ScanViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScanViewController.m; sourceTree = "<group>"; };
 		A7C625E91F99C48700D04A54 /* SaveViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SaveViewController.h; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 			children = (
 				A7D8B9D11F73ACDB005FF1C7 /* SYBarcodeManager.h */,
 				A7D8B9D21F73ACDB005FF1C7 /* SYBarcodeManager.m */,
+				A773C6792175DAB90047095B /* scanner_line@2x.png */,
 				A7C625EC1F99DC1600D04A54 /* SYBarcodeView.h */,
 				A7C625ED1F99DC1600D04A54 /* SYBarcodeView.m */,
 			);
@@ -236,7 +239,8 @@
 				TargetAttributes = {
 					A74ECDE51D0FB8A000370F1F = {
 						CreatedOnToolsVersion = 7.2.1;
-						DevelopmentTeam = YA3584AU76;
+						DevelopmentTeam = 5JH8ZFBFJD;
+						ProvisioningStyle = Automatic;
 					};
 					A74ECDFE1D0FB8A000370F1F = {
 						CreatedOnToolsVersion = 7.2.1;
@@ -276,6 +280,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A74ECDF91D0FB8A000370F1F /* LaunchScreen.storyboard in Resources */,
+				A773C67A2175DAB90047095B /* scanner_line@2x.png in Resources */,
 				A74ECDF61D0FB8A000370F1F /* Assets.xcassets in Resources */,
 				A74ECDF41D0FB8A000370F1F /* Main.storyboard in Resources */,
 			);
@@ -447,16 +452,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: junjie cai (5BE779GQZQ)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: junjie cai (5BE779GQZQ)";
-				DEVELOPMENT_TEAM = YA3584AU76;
+				CODE_SIGN_IDENTITY = "iPhone Developer: zhangsy757@163.com (HB6NTMQE7D)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5JH8ZFBFJD;
 				INFOPLIST_FILE = DemoBarcode/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.vstecs.VSTOB;
+				PRODUCT_BUNDLE_IDENTIFIER = com.herman.scan;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "4dbf0f5e-ddc3-4457-b395-1a18ea472cbe";
-				PROVISIONING_PROFILE_SPECIFIER = VstEcsAllDeveloperProfile;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
@@ -464,16 +470,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: junjie cai (5BE779GQZQ)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: junjie cai (5BE779GQZQ)";
-				DEVELOPMENT_TEAM = YA3584AU76;
+				CODE_SIGN_IDENTITY = "iPhone Developer: zhangsy757@163.com (HB6NTMQE7D)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5JH8ZFBFJD;
 				INFOPLIST_FILE = DemoBarcode/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.vstecs.VSTOB;
+				PRODUCT_BUNDLE_IDENTIFIER = com.herman.scan;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "4dbf0f5e-ddc3-4457-b395-1a18ea472cbe";
-				PROVISIONING_PROFILE_SPECIFIER = VstEcsAllDeveloperProfile;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};

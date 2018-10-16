@@ -24,11 +24,11 @@
 /// 扫描窗口大小，默认居中偏上
 @property (nonatomic, assign) CGRect scanFrame;
     
-/// 对角线颜色，默认绿色
+/// 对角线颜色，默认橙色
 @property (nonatomic, strong) UIColor *cornerColor;
-/// 扫描线，没有图标时，默认绿色
+/// 扫描线
 @property (nonatomic, strong) UIImageView *scanline;
 /// 扫描线动画时间，默认1.6秒
 @property (nonatomic, assign) NSTimeInterval scanTimeDuration;
-    
+
 @end

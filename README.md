@@ -57,6 +57,12 @@ UIImage *image = [SYBarcodeManager barcodeImageWithContent:@"https://github.com/
 
 
 # 修改完善
+* 20181016
+  * 版本号：2.0.2
+  * 功能完善
+    * 扫描线条改成图标
+    * 扫描线条动画改成上下往返
+    
 * 20180918
   * 版本号：2.0.1
   * 功能添加
