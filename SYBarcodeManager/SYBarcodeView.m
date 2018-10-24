@@ -105,6 +105,7 @@ static CGFloat const heightline = 5.0;
    
 - (void)reloadBarcodeView
 {
+    //
     [self addScanView:self.frame];
     [self addScanLine];
     [self addScanCorner];
