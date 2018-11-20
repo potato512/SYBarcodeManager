@@ -69,6 +69,10 @@ UIImage *image = [SYBarcodeManager barcodeImageWithContent:@"https://github.com/
 
 
 # 修改完善
+* 20181120
+  * 版本号：2.1.1
+  * 修改异常
+
 * 20181016
   * 版本号：2.1.0
   * 功能完善
