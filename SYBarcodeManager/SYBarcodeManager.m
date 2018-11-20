@@ -32,18 +32,16 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 - (instancetype)initWithFrame:(CGRect)frame view:(UIView *)superView
 {
     self = [super init];
-    if (self)
-    {        
+    if (self) {
+        //
         _alertMessage = @"未获取到摄像设备";
         _alertTitle = @"知道了";
-        
         _message = @"将二维码放入框内，即可自动扫描";
-        
+        //
         self.superFrame = frame;
         CGFloat size = ((frame.size.width > frame.size.height ? frame.size.height : frame.size.width) * 0.6);
         self.scanFrame = CGRectMake((frame.size.width - size) / 2, (frame.size.width - size) / 2, size, size);
-        if (superView)
-        {
+        if (superView) {
             [superView addSubview:self.scanView];
         }
         self.scanView.label.text = _message;
@@ -53,7 +51,7 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
     
 - (void)dealloc
 {
-    NSLog(@"%@ 被释放了...", [self class]);
+    NSLog(@"%@ 被释放了...", self.class);
 }
     
 #pragma mark - 扫描二维码
@@ -74,8 +72,7 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
     self.scanningComplete = [complete copy];
     
     // 显示扫描相机
-    if (self.avLayer.superlayer == nil)
-    {
+    if (self.avLayer.superlayer == nil) {
         // 扫描框的位置和大小
         self.avLayer.frame = self.scanView.superview.bounds;
         [self.scanView.superview.layer insertSublayer:self.avLayer above:0];
@@ -124,8 +121,7 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
     
 - (SYBarcodeView *)scanView
 {
-    if (_scanView == nil)
-    {
+    if (_scanView == nil) {
         _scanView = [[SYBarcodeView alloc] initWithFrame:self.superFrame];
     }
     return _scanView;
@@ -135,13 +131,11 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
     
 - (AVCaptureSession *)avSession
 {
-    if (_avSession == nil)
-    {
+    if (_avSession == nil) {
         // 获取摄像设备
         AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
         // 异常判断
-        if (device == nil)
-        {
+        if (device == nil) {
             // 设备无摄像时
             [[[UIAlertView alloc] initWithTitle:nil message:self.alertMessage delegate:nil cancelButtonTitle:nil otherButtonTitles:self.alertTitle, nil] show];
             return nil;
@@ -177,8 +171,7 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 
 - (AVCaptureVideoPreviewLayer *)avLayer
 {
-    if (_avLayer == nil)
-    {
+    if (_avLayer == nil) {
         _avLayer = [AVCaptureVideoPreviewLayer layerWithSession:self.avSession];
         _avLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
         
@@ -232,8 +225,7 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 {
     NSLog(@"%s", __func__);
     
-    if (metadataObjects.count > 0)
-    {
+    if (metadataObjects.count > 0) {
         // [session stopRunning];
         AVMetadataMachineReadableCodeObject *metadataObject = [metadataObjects objectAtIndex: 0];
         // 输出扫描字符串
@@ -245,8 +237,7 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
         // 停止扫描线
         [self.scanView scanLineStop];
         
-        if (self.scanningComplete)
-        {
+        if (self.scanningComplete) {
             NSString *scanResult = metadataObject.stringValue;
             self.scanningComplete(scanResult);
         }
@@ -291,7 +282,7 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 }
 
 // 内存管理
-void ProviderReleaseData (void *info, const void *data, size_t size)
+void ProviderReleaseCacheData (void *info, const void *data, size_t size)
 {
     free((void*)data);
 }
@@ -310,26 +301,22 @@ void ProviderReleaseData (void *info, const void *data, size_t size)
     // 遍历像素
     int pixelNum = imageWidth * imageHeight;
     uint32_t *pCurPtr = rgbImageBuf;
-    for (int i = 0; i < pixelNum; i++, pCurPtr++)
-    {
-        if ((*pCurPtr & 0xFFFFFF00) < 0x99999900)
-        {
+    for (int i = 0; i < pixelNum; i++, pCurPtr++) {
+        if ((*pCurPtr & 0xFFFFFF00) < 0x99999900) {
             // 将白色变成透明
             // 改成下面的代码，会将图片转成想要的颜色
             uint8_t* ptr = (uint8_t*)pCurPtr;
             ptr[3] = red; //0~255
             ptr[2] = green;
             ptr[1] = blue;
-        }
-        else
-        {
+        } else {
             uint8_t *ptr = (uint8_t *)pCurPtr;
             ptr[0] = 0;
         }
     }
     
     // 输出图片
-    CGDataProviderRef dataProvider = CGDataProviderCreateWithData(NULL, rgbImageBuf, bytesPerRow * imageHeight, ProviderReleaseData);
+    CGDataProviderRef dataProvider = CGDataProviderCreateWithData(NULL, rgbImageBuf, bytesPerRow * imageHeight, ProviderReleaseCacheData);
     CGImageRef imageRef = CGImageCreate(imageWidth, imageHeight, 8, 32, bytesPerRow, colorSpace,
                                         kCGImageAlphaLast | kCGBitmapByteOrder32Little, dataProvider,
                                         NULL, true, kCGRenderingIntentDefault);

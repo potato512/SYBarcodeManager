@@ -6,6 +6,12 @@
 * 条形码
   * 生成条形码
 
+
+# 使用介绍
+* 自动导入：使用命令`pod 'SYBarcodeManager'`导入到项目中
+* 手动导入：或下载源码后，将源码添加到项目中
+
+
 * 扫描二维码
 # 代码示例
 ~~~ javascript
@@ -63,6 +69,10 @@ UIImage *image = [SYBarcodeManager barcodeImageWithContent:@"https://github.com/
 
 
 # 修改完善
+* 20181120
+  * 版本号：2.1.1
+  * 修改异常
+
 * 20181016
   * 版本号：2.1.0
   * 功能完善

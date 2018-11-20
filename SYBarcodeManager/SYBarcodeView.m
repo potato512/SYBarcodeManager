@@ -22,8 +22,7 @@ static CGFloat const heightline = 5.0;
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
-    if (self)
-    {
+    if (self) {
         self.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.3];
         self.opaque = NO;
         
@@ -93,8 +92,7 @@ static CGFloat const heightline = 5.0;
 // 设置扫描线
 - (void)addScanLine
 {
-    if (self.scanline.superview == nil)
-    {
+    if (self.scanline.superview == nil) {
         [self addSubview:self.scanline];
     }
     
@@ -182,7 +180,7 @@ static CGFloat const heightline = 5.0;
         _label.backgroundColor = [UIColor clearColor];
         _label.textAlignment = NSTextAlignmentCenter;
         _label.textColor = [[UIColor whiteColor] colorWithAlphaComponent:0.5];
-        _label.font = [UIFont systemFontOfSize:12.0];
+        _label.font = [UIFont systemFontOfSize:15.0];
     }
     return _label;
 }
