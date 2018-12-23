@@ -10,6 +10,7 @@
 
 static CGFloat const originXLine = 5.0;
 static CGFloat const heightline = 5.0;
+static CGFloat const originXY = 10.0;
 
 @interface SYBarcodeView ()
 
@@ -108,7 +109,7 @@ static CGFloat const heightline = 5.0;
     [self addScanLine];
     [self addScanCorner];
     //
-    self.label.frame = CGRectMake(10.0, (self.scanFrame.origin.y + self.scanFrame.size.height + 10.0), (self.frame.size.width - 20.0), 40.0f);
+    self.label.frame = CGRectMake(originXY, (self.scanFrame.origin.y + self.scanFrame.size.height + originXY), (self.frame.size.width - originXY * 2), 40.0f);
 }
 
 - (void)scanLineAnimation
