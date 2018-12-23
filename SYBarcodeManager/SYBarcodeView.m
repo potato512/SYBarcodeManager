@@ -108,7 +108,7 @@ static CGFloat const heightline = 5.0;
     [self addScanLine];
     [self addScanCorner];
     //
-    self.label.frame = CGRectMake(self.scanFrame.origin.x, (self.scanFrame.origin.y + self.scanFrame.size.height), self.scanFrame.size.width, 40.0f);
+    self.label.frame = CGRectMake(10.0, (self.scanFrame.origin.y + self.scanFrame.size.height + 10.0), (self.frame.size.width - 20.0), 40.0f);
 }
 
 - (void)scanLineAnimation
@@ -181,6 +181,7 @@ static CGFloat const heightline = 5.0;
         _label.textAlignment = NSTextAlignmentCenter;
         _label.textColor = [[UIColor whiteColor] colorWithAlphaComponent:0.5];
         _label.font = [UIFont systemFontOfSize:15.0];
+        _label.numberOfLines = 2;
     }
     return _label;
 }

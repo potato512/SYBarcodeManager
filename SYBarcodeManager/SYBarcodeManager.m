@@ -36,7 +36,7 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
         //
         _alertMessage = @"未获取到摄像设备";
         _alertTitle = @"知道了";
-        _message = @"将二维码放入框内，即可自动扫描";
+        _message = @"将二维码放入框内，即可自动扫描.";
         //
         self.superFrame = frame;
         CGFloat size = ((frame.size.width > frame.size.height ? frame.size.height : frame.size.width) * 0.6);
