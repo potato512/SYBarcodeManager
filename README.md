@@ -132,25 +132,6 @@ UIImage *image = [SYBarcodeManager barcodeImageWithContent:@"https://github.com/
     * 停止扫描后重新开始扫描
     * 扫描线属性
 
-~~~ javascript
-/// 重新开始扫描
-- (void)barcodeScanningStart;
-
-/// 是否显示扫描线，默认NO不显示
-@property (nonatomic, assign) BOOL showScanline;
-/// 扫描线颜色，默认灰色
-@property (nonatomic, strong) UIColor *scanlineColor;
-/// 是否显示角线，默认NO不显示
-@property (nonatomic, assign) BOOL showScanCorner;
-/// 角线颜色，默认黑色
-@property (nonatomic, strong) UIColor *scanCornerColor;
-/// 扫描线动画时间，默认1.6秒
-@property (nonatomic, assign) NSTimeInterval scanTimeDuration;
-/// 圆角，默认方角
-@property (nonatomic, assign) CGFloat scanRadius;
-
-~~~
-
 * 20170921
   * 版本号：1.0.0
   * 源码与Demo分离
