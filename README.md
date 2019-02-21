@@ -69,6 +69,11 @@ UIImage *image = [SYBarcodeManager barcodeImageWithContent:@"https://github.com/
 
 
 # 修改完善
+* 20190221
+  * 版本号：2.1.6
+  * 异常修复
+    * 退出扫描时异常
+    
 * 20190220
   * 版本号：2.1.5
   * 异常修改

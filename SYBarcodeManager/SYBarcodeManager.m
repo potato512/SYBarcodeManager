@@ -64,10 +64,12 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 /// 退出扫描
 - (void)QrcodeScanningCancel
 {
-    [self.avSession stopRunning];
-    
-    self.scanningComplete = nil;
-    [self.scanView scanLineStop];
+    if (self.isValidScan) {
+        [self.avSession stopRunning];
+        
+        self.scanningComplete = nil;
+        [self.scanView scanLineStop];
+    }
 }
 
 /// 开始扫描
