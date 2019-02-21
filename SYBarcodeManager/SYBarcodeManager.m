@@ -10,15 +10,16 @@
 #import <AVFoundation/AVFoundation.h>
 #import "SYBarcodeView.h"
 
-typedef void (^ScanningComplete)(NSString *scanResult);
+typedef void (^ScanningComplete)(BOOL isValid, NSString *scanResult);
 
 typedef void (^SaveToPhotosAlbumComplete)(BOOL isSuccess);
 static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 
 @interface SYBarcodeManager () <AVCaptureMetadataOutputObjectsDelegate>
 
+@property (nonatomic, assign) BOOL isValidDevice;
+
 @property (nonatomic, strong) AVCaptureDevice *captureDevice;
-@property (nonatomic, assign) BOOL isValidScan;
 
 @property (nonatomic, strong) UIView *superview;
 @property (nonatomic, assign) CGRect superFrame;
@@ -38,9 +39,6 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
     self = [super init];
     if (self) {
         //
-        _alertTitle = @"温馨提示";
-        _alertMessage = @"未获取到摄像设备";
-        _buttonTitle = @"知道了";
         _message = @"将二维码放入框内，即可自动扫描.";
         _messagePosition = 0;
         _messageFont = [UIFont systemFontOfSize:15.0];
@@ -64,7 +62,7 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 /// 退出扫描
 - (void)QrcodeScanningCancel
 {
-    if (self.isValidScan) {
+    if (self.isValidDevice) {
         [self.avSession stopRunning];
         
         self.scanningComplete = nil;
@@ -73,37 +71,39 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 }
 
 /// 开始扫描
-- (void)QrcodeScanningStart:(void (^)(NSString *scanResult))complete
+- (void)QrcodeScanningStart:(void (^)(BOOL isEnable, NSString *result))complete
 {
-    if (!self.isValidScan) {
-        [[[UIAlertView alloc] initWithTitle:self.alertTitle message:self.alertMessage delegate:nil cancelButtonTitle:nil otherButtonTitles:self.buttonTitle, nil] show];
-        return;
-    }
-    //
-    if (self.superview) {
-        [self.superview addSubview:self.scanView];
-    }
-    self.scanView.label.text = self.message;
-    self.scanView.label.textColor = self.messageColor;
-    self.scanView.label.font = self.messageFont;
-
-    // 回调
-    self.scanningComplete = [complete copy];
-    
-    // 显示扫描相机
-    if (self.avLayer.superlayer == nil) {
-        // 扫描框的位置和大小
-        self.avLayer.frame = self.scanView.superview.bounds;
-        [self.scanView.superview.layer insertSublayer:self.avLayer above:0];
-        [self.scanView.superview bringSubviewToFront:self.scanView];
+    if (self.isValidDevice) {
+        // 视图
+        if (self.superview) {
+            [self.superview addSubview:self.scanView];
+        }
+        self.scanView.label.text = self.message;
+        self.scanView.label.textColor = self.messageColor;
+        self.scanView.label.font = self.messageFont;
         
-        self.scanView.superview.clipsToBounds = YES;
-        self.scanView.superview.layer.masksToBounds = YES;
+        // 回调
+        self.scanningComplete = [complete copy];
+        
+        // 显示扫描相机
+        if (self.avLayer.superlayer == nil) {
+            // 扫描框的位置和大小
+            self.avLayer.frame = self.scanView.superview.bounds;
+            [self.scanView.superview.layer insertSublayer:self.avLayer above:0];
+            [self.scanView.superview bringSubviewToFront:self.scanView];
+            
+            self.scanView.superview.clipsToBounds = YES;
+            self.scanView.superview.layer.masksToBounds = YES;
+        }
+        
+        // 开始捕获
+        [self.avSession startRunning];
+        [self.scanView scanLineStart];
+    } else {
+        if (complete) {
+            complete(NO, nil);
+        }
     }
-    
-    // 开始捕获
-    [self.avSession startRunning];
-    [self.scanView scanLineStart];
 }
 
 #pragma mark - 长按识别二维码
@@ -148,7 +148,7 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 
 #pragma mark 扫描器
 
-- (BOOL)isValidScan
+- (BOOL)isValidDevice
 {
     if (self.captureDevice == nil) {
         return NO;
@@ -272,8 +272,8 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
         [self.scanView scanLineStop];
         
         if (self.scanningComplete) {
-            NSString *scanResult = metadataObject.stringValue;
-            self.scanningComplete(scanResult);
+            NSString *result = metadataObject.stringValue;
+            self.scanningComplete(self.isValidDevice, result);
         }
     }
 }
@@ -409,5 +409,43 @@ void ProviderReleaseCacheData (void *info, const void *data, size_t size)
     CGImageRelease(bitmapImage);
     return [UIImage imageWithCGImage:scaledImage];
 }
+
+#pragma mark - 闪光灯
+
+- (void)openFlashLight:(void (^)(BOOL hasFlash, BOOL isOpen))complete
+{
+    BOOL enable = NO;
+    BOOL open = NO;
+    
+    if (self.isValidDevice) {
+        if ([self.captureDevice hasTorch] && [self.captureDevice hasFlash])
+        {
+            enable = YES;
+            
+            if (self.captureDevice.torchMode == AVCaptureTorchModeOff)
+            {
+                [self.captureDevice lockForConfiguration:nil];
+                [self.captureDevice setTorchMode: AVCaptureTorchModeOn];
+                [self.captureDevice unlockForConfiguration];
+                
+                open = YES;
+            } else {
+                [self.captureDevice lockForConfiguration:nil];
+                [self.captureDevice setTorchMode: AVCaptureTorchModeOff];
+                [self.captureDevice unlockForConfiguration];
+                
+                open = NO;
+            }
+        } else {
+            enable = NO;
+            open = NO;
+        }
+    }
+    
+    if (complete) {
+        complete(enable, open);
+    }
+}
+
 
 @end

@@ -23,9 +23,27 @@
     
     self.title = @"二维码扫描";
     
-    UIBarButtonItem *startItem = [[UIBarButtonItem alloc] initWithTitle:@"start" style:UIBarButtonItemStyleDone target:self action:@selector(startClick:)];
-    UIBarButtonItem *cancleItem = [[UIBarButtonItem alloc] initWithTitle:@"cancle" style:UIBarButtonItemStyleDone target:self action:@selector(cancelClick:)];
-    self.navigationItem.rightBarButtonItems = @[startItem, cancleItem];
+    UIButton *scanButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, 40.0, 40.0)];
+    [scanButton setTitle:@"开始" forState:UIControlStateNormal];
+    [scanButton setTitle:@"退出" forState:UIControlStateSelected];
+    [scanButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [scanButton setTitleColor:[UIColor redColor] forState:UIControlStateHighlighted];
+    [scanButton setTitleColor:[UIColor redColor] forState:UIControlStateSelected];
+    [scanButton addTarget:self action:@selector(scanClick:) forControlEvents:UIControlEventTouchUpInside];
+    UIButton *lightButton = [[UIButton alloc] initWithFrame:CGRectMake(60.0, 0.0, 40.0, 40.0)];
+    [lightButton setTitle:@"开灯" forState:UIControlStateNormal];
+    [lightButton setTitle:@"关灯" forState:UIControlStateSelected];
+    [lightButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [lightButton setTitleColor:[UIColor redColor] forState:UIControlStateHighlighted];
+    [lightButton setTitleColor:[UIColor redColor] forState:UIControlStateSelected];
+    [lightButton addTarget:self action:@selector(lightClick:) forControlEvents:UIControlEventTouchUpInside];
+    UIView *buttonView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 100.0, 40.0)];
+    buttonView.userInteractionEnabled = YES;
+    buttonView.backgroundColor = [UIColor greenColor];
+    [buttonView addSubview:scanButton];
+    [buttonView addSubview:lightButton];
+    //
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:buttonView];
     
     [self setUI];
 }
@@ -70,12 +88,47 @@
         self.scanningBarcode.scanCornerColor = [[UIColor orangeColor] colorWithAlphaComponent:1.0];
         self.scanningBarcode.scanFrame = CGRectMake(100.0, (CGRectGetHeight(self.view.bounds) - (CGRectGetWidth(self.view.bounds) - 100.0 * 2)) / 2, (CGRectGetWidth(self.view.bounds) - 100.0 * 2), (CGRectGetWidth(self.view.bounds) - 100.0 * 2));
     }
-    [self.scanningBarcode QrcodeScanningStart:^(NSString *scanResult) {
-        NSLog(@"scanResult = %@", scanResult);
-        [[[UIAlertView alloc] initWithTitle:nil message:scanResult delegate:nil cancelButtonTitle:nil otherButtonTitles:@"ok", nil] show];
+    [self.scanningBarcode QrcodeScanningStart:^(BOOL isEnable, NSString *result) {
+        NSString *message = result;
+        if (isEnable) {
+            message = result;
+        } else {
+            message = @"设备不支持";
+        }
+        [[[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:nil otherButtonTitles:@"知道了", nil] show];
     }];
 }
-    
+
+- (void)scanClick:(UIButton *)button
+{
+    if (button.selected) {
+        [self.scanningBarcode QrcodeScanningCancel];
+    } else {
+        [self.scanningBarcode QrcodeScanningStart:^(BOOL isEnable, NSString *result) {
+            NSString *message = result;
+            if (isEnable) {
+                message = result;
+                
+                button.selected = !button.selected;
+            } else {
+                message = @"设备不支持";
+            }
+            [[[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:nil otherButtonTitles:@"知道了", nil] show];
+        }];
+    }
+}
+
+- (void)lightClick:(UIButton *)button
+{
+    [self.scanningBarcode openFlashLight:^(BOOL hasFlash, BOOL isOpen) {
+        if (hasFlash) {
+            button.selected = isOpen;
+        } else {
+            [[[UIAlertView alloc] initWithTitle:nil message:@"设备不支持" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"知道了", nil] show];
+        }
+    }];
+}
+
 #pragma mark - 二维码扫描
     
 - (SYBarcodeManager *)scanningBarcode
@@ -87,19 +140,6 @@
     }
     
     return _scanningBarcode;
-}
-
-- (void)startClick:(UIBarButtonItem *)item
-{
-    [self.scanningBarcode QrcodeScanningStart:^(NSString *scanResult) {
-        NSLog(@"scanResult = %@", scanResult);
-        [[[UIAlertView alloc] initWithTitle:nil message:scanResult delegate:nil cancelButtonTitle:nil otherButtonTitles:@"ok", nil] show];
-    }];
-}
-
-- (void)cancelClick:(UIBarButtonItem *)item
-{
-    [self.scanningBarcode QrcodeScanningCancel];
 }
     
 @end

@@ -27,13 +27,6 @@
 /// 扫描线动画时间（默认1.6秒）
 @property (nonatomic, assign) NSTimeInterval scanTimeDuration;
 
-/// 提示标题（默认：温馨提示）
-@property (nonatomic, strong) NSString *alertTitle;
-/// 提示信息（默认：未获取到摄像设备）
-@property (nonatomic, strong) NSString *alertMessage;
-/// 按钮标题（默认：知道了）
-@property (nonatomic, strong) NSString *buttonTitle;
-
 /// 扫描提示语（默认值: 将二维码放入框内，即可自动扫描）
 @property (nonatomic, strong) NSString *message;
 /// 显示位置（默认0底端，1顶端）
@@ -49,7 +42,7 @@
 - (void)QrcodeScanningCancel;
 
 /// 开始扫描
-- (void)QrcodeScanningStart:(void (^)(NSString *scanResult))complete;
+- (void)QrcodeScanningStart:(void (^)(BOOL isEnable, NSString *result))complete;
 
 #pragma mark - 长按识别二维码
 
@@ -73,5 +66,14 @@
 
 /// 生成条形码 条形码尺寸大小
 + (UIImage *)BarcodeImageWithContent:(NSString *)content size:(CGSize)size;
+
+#pragma mark - 闪光灯
+
+/**
+ 闪光灯的开关
+
+ @param complete 状态回调
+ */
+- (void)openFlashLight:(void (^)(BOOL hasFlash, BOOL isOpen))complete;
 
 @end
