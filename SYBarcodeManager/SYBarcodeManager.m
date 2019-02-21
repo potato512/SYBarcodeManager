@@ -1,5 +1,5 @@
 //
-//  BarCodeManager.m
+//  SYBarcodeManager.m
 //  zhangshaoyu
 //
 //  Created by zhangshaoyu on 16/1/19.
@@ -16,7 +16,11 @@ typedef void (^SaveToPhotosAlbumComplete)(BOOL isSuccess);
 static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 
 @interface SYBarcodeManager () <AVCaptureMetadataOutputObjectsDelegate>
-    
+
+@property (nonatomic, strong) AVCaptureDevice *captureDevice;
+@property (nonatomic, assign) BOOL isValidScan;
+
+@property (nonatomic, strong) UIView *superview;
 @property (nonatomic, assign) CGRect superFrame;
 @property (nonatomic, strong) SYBarcodeView *scanView;
 
@@ -34,17 +38,18 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
     self = [super init];
     if (self) {
         //
+        _alertTitle = @"温馨提示";
         _alertMessage = @"未获取到摄像设备";
-        _alertTitle = @"知道了";
+        _buttonTitle = @"知道了";
         _message = @"将二维码放入框内，即可自动扫描.";
+        _messagePosition = 0;
+        _messageFont = [UIFont systemFontOfSize:15.0];
+        _messageColor = [[UIColor whiteColor] colorWithAlphaComponent:0.5];
         //
         self.superFrame = frame;
+        self.superview = superView;
         CGFloat size = ((frame.size.width > frame.size.height ? frame.size.height : frame.size.width) * 0.6);
         self.scanFrame = CGRectMake((frame.size.width - size) / 2, (frame.size.width - size) / 2, size, size);
-        if (superView) {
-            [superView addSubview:self.scanView];
-        }
-        self.scanView.label.text = _message;
     }
     return self;
 }
@@ -68,6 +73,18 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 /// 开始扫描
 - (void)QrcodeScanningStart:(void (^)(NSString *scanResult))complete
 {
+    if (!self.isValidScan) {
+        [[[UIAlertView alloc] initWithTitle:self.alertTitle message:self.alertMessage delegate:nil cancelButtonTitle:nil otherButtonTitles:self.buttonTitle, nil] show];
+        return;
+    }
+    //
+    if (self.superview) {
+        [self.superview addSubview:self.scanView];
+    }
+    self.scanView.label.text = self.message;
+    self.scanView.label.textColor = self.messageColor;
+    self.scanView.label.font = self.messageFont;
+
     // 回调
     self.scanningComplete = [complete copy];
     
@@ -128,21 +145,29 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 }
 
 #pragma mark 扫描器
+
+- (BOOL)isValidScan
+{
+    if (self.captureDevice == nil) {
+        return NO;
+    }
+    return YES;
+}
+
+- (AVCaptureDevice *)captureDevice
+{
+    if (_captureDevice == nil) {
+        _captureDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    }
+    return _captureDevice;
+}
     
 - (AVCaptureSession *)avSession
 {
     if (_avSession == nil) {
-        // 获取摄像设备
-        AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-        // 异常判断
-        if (device == nil) {
-            // 设备无摄像时
-            [[[UIAlertView alloc] initWithTitle:nil message:self.alertMessage delegate:nil cancelButtonTitle:nil otherButtonTitles:self.alertTitle, nil] show];
-            return nil;
-        }
         
         // 创建输入流
-        AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:device error:nil];
+        AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:self.captureDevice error:nil];
         
         // 创建输出流
         AVCaptureMetadataOutput *output = [[AVCaptureMetadataOutput alloc] init];
@@ -216,6 +241,13 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 {
     _message = message;
     self.scanView.label.text = _message;
+}
+
+- (void)setMessagePosition:(NSInteger)messagePosition
+{
+    _messagePosition = messagePosition;
+    self.scanView.position = _messagePosition;
+    [self.scanView reloadBarcodeView];
 }
 
 #pragma mark AVCaptureMetadataOutputObjectsDelegate

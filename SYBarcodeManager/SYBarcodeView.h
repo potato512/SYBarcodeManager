@@ -33,5 +33,7 @@
 
 /// 提示语
 @property (nonatomic, strong) UILabel *label;
+/// 显示位置（默认0底端，1顶端）
+@property (nonatomic, assign) NSInteger position;
 
 @end

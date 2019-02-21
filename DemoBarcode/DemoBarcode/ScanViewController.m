@@ -53,9 +53,14 @@
     }
     else if (2 == self.type)
     {
+        self.scanningBarcode.message = @"扫描框对准二维码";
+        self.scanningBarcode.messagePosition = 1;
+        self.scanningBarcode.messageFont = [UIFont systemFontOfSize:20.0];
+        self.scanningBarcode.messageColor = [UIColor redColor];
+        
         self.scanningBarcode.maskColor = [UIColor clearColor];
         self.scanningBarcode.scanCornerColor = [UIColor greenColor];
-        self.scanningBarcode.scanlineImage = [UIImage imageNamed:@"line"];
+        self.scanningBarcode.scanlineImage = nil;
         
         self.scanningBarcode.scanFrame = CGRectMake(60.0, (CGRectGetHeight(self.view.bounds) - (CGRectGetWidth(self.view.bounds) - 60.0 * 2)) / 2, (CGRectGetWidth(self.view.bounds) - 60.0 * 2), (CGRectGetWidth(self.view.bounds) - 60.0 * 2));
     }
@@ -63,7 +68,6 @@
     {
         self.scanningBarcode.maskColor = [[UIColor greenColor] colorWithAlphaComponent:0.3];
         self.scanningBarcode.scanCornerColor = [[UIColor orangeColor] colorWithAlphaComponent:1.0];
-        
         self.scanningBarcode.scanFrame = CGRectMake(100.0, (CGRectGetHeight(self.view.bounds) - (CGRectGetWidth(self.view.bounds) - 100.0 * 2)) / 2, (CGRectGetWidth(self.view.bounds) - 100.0 * 2), (CGRectGetWidth(self.view.bounds) - 100.0 * 2));
     }
     [self.scanningBarcode QrcodeScanningStart:^(NSString *scanResult) {
@@ -76,11 +80,10 @@
     
 - (SYBarcodeManager *)scanningBarcode
 {
-    if (!_scanningBarcode)
-    {
+    if (!_scanningBarcode) {
         CGRect rect = CGRectMake(60.0, (CGRectGetHeight(self.view.bounds) - (CGRectGetWidth(self.view.bounds) - 60.0 * 2)) / 2, (CGRectGetWidth(self.view.bounds) - 60.0 * 2), (CGRectGetWidth(self.view.bounds) - 60.0 * 2));
-        rect = self.view.bounds;
-        _scanningBarcode = [[SYBarcodeManager alloc] initWithFrame:self.view.bounds view:self.view];
+//        rect = self.view.bounds;
+        _scanningBarcode = [[SYBarcodeManager alloc] initWithFrame:rect view:self.view];
     }
     
     return _scanningBarcode;

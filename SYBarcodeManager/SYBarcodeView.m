@@ -104,12 +104,29 @@ static CGFloat const originXY = 10.0;
    
 - (void)reloadBarcodeView
 {
+    CGFloat width = self.scanFrame.origin.x + self.scanFrame.size.width;
+    CGFloat height = self.scanFrame.origin.y + self.scanFrame.size.height;
+    CGRect rectTmp = self.scanFrame;
+    if (width > self.frame.size.width) {
+        rectTmp.size.width = self.frame.size.width - self.scanFrame.origin.x - 2.5;
+    }
+    if (height > self.frame.size.height) {
+        rectTmp.size.height = self.frame.size.height - self.scanFrame.origin.y - 2.5;
+    }
+    self.scanFrame = rectTmp;
+    
     //
     [self addScanView:self.frame];
     [self addScanLine];
     [self addScanCorner];
     //
-    self.label.frame = CGRectMake(originXY, (self.scanFrame.origin.y + self.scanFrame.size.height + originXY), (self.frame.size.width - originXY * 2), 40.0f);
+    CGRect rect = CGRectMake(originXY, (self.scanFrame.origin.y + self.scanFrame.size.height + originXY), (self.frame.size.width - originXY * 2), 40.0f);
+    if (self.position == 0) {
+        rect.origin.y = (self.scanFrame.origin.y - 40.0);
+    } else if (self.position == 1) {
+        rect.origin.y = (self.scanFrame.origin.y + self.scanFrame.size.height + originXY);
+    }
+    self.label.frame = rect;
 }
 
 - (void)scanLineAnimation

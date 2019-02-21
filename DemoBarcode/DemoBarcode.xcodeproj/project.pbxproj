@@ -239,7 +239,7 @@
 				TargetAttributes = {
 					A74ECDE51D0FB8A000370F1F = {
 						CreatedOnToolsVersion = 7.2.1;
-						DevelopmentTeam = 5JH8ZFBFJD;
+						DevelopmentTeam = 9YWJ3PZHZG;
 						ProvisioningStyle = Manual;
 					};
 					A74ECDFE1D0FB8A000370F1F = {
@@ -455,14 +455,15 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: zhangsy757@163.com (HB6NTMQE7D)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 5JH8ZFBFJD;
+				DEVELOPMENT_TEAM = 9YWJ3PZHZG;
 				INFOPLIST_FILE = DemoBarcode/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.herman.scan;
+				PRODUCT_BUNDLE_IDENTIFIER = com.byd.common;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "4dbf0f5e-ddc3-4457-b395-1a18ea472cbe";
-				PROVISIONING_PROFILE_SPECIFIER = hermanDevelopment;
+				PROVISIONING_PROFILE_SPECIFIER = Development_Provisioning_BYDCommon;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -473,14 +474,15 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: zhangsy757@163.com (HB6NTMQE7D)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 5JH8ZFBFJD;
+				DEVELOPMENT_TEAM = 9YWJ3PZHZG;
 				INFOPLIST_FILE = DemoBarcode/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.herman.scan;
+				PRODUCT_BUNDLE_IDENTIFIER = com.byd.common;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "4dbf0f5e-ddc3-4457-b395-1a18ea472cbe";
-				PROVISIONING_PROFILE_SPECIFIER = hermanDevelopment;
+				PROVISIONING_PROFILE_SPECIFIER = Development_Provisioning_BYDCommon;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
