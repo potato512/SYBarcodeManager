@@ -135,7 +135,7 @@
 {
     if (!_scanningBarcode) {
         CGRect rect = CGRectMake(60.0, (CGRectGetHeight(self.view.bounds) - (CGRectGetWidth(self.view.bounds) - 60.0 * 2)) / 2, (CGRectGetWidth(self.view.bounds) - 60.0 * 2), (CGRectGetWidth(self.view.bounds) - 60.0 * 2));
-//        rect = self.view.bounds;
+        rect = self.view.bounds;
         _scanningBarcode = [[SYBarcodeManager alloc] initWithFrame:rect view:self.view];
     }
     

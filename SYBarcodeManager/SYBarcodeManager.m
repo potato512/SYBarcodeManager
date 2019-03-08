@@ -186,7 +186,8 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
         
         // 设置扫码支持的编码格式(如下设置条形码和二维码兼容)
 //        output.metadataObjectTypes = @[AVMetadataObjectTypeQRCode, AVMetadataObjectTypeEAN13Code, AVMetadataObjectTypeEAN8Code, AVMetadataObjectTypeUPCECode, AVMetadataObjectTypeCode39Code, AVMetadataObjectTypeCode39Mod43Code, AVMetadataObjectTypeCode93Code, AVMetadataObjectTypeCode128Code, AVMetadataObjectTypePDF417Code];
-        output.metadataObjectTypes = @[AVMetadataObjectTypeQRCode];
+//        output.metadataObjectTypes = @[AVMetadataObjectTypeQRCode]; // 仅条形码
+        output.metadataObjectTypes = @[AVMetadataObjectTypeQRCode, AVMetadataObjectTypeEAN13Code, AVMetadataObjectTypeEAN8Code, AVMetadataObjectTypeCode128Code]; // 条形码和二维码
         
         // 调整扫描位置（取值范围{0,0,1,1}，且取反{y,x,height,width}）
         CGSize size = [UIScreen mainScreen].bounds.size;

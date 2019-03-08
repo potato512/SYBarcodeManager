@@ -1,9 +1,11 @@
 # SYBarcodeManager
 二维码操作封装类
 * 二维码
-  * 扫描二维码
+  * 扫描识别二维码
+  * 长按识别二维码
   * 生成二维码
 * 条形码
+  * 扫描识别条形码
   * 生成条形码
 
 
@@ -85,6 +87,11 @@ UIImage *image = [SYBarcodeManager barcodeImageWithContent:@"https://github.com/
 
 
 # 修改完善
+* 20190308
+  * 版本号：2.1.8
+  * 功能优化
+    * 扫描条形码
+
 * 20190221
   * 版本号：2.1.6 2.1.7
   * 功能优化

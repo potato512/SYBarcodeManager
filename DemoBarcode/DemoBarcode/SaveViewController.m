@@ -52,7 +52,7 @@
     [self.view addSubview:imageview01];
     imageview01.tag = 1000;
     
-    UIImageView *imageview02 = [[UIImageView alloc] initWithFrame:CGRectMake(10.0, (CGRectGetHeight(imageview01.bounds) + 10.0 + 10.0), width, height)];
+    UIImageView *imageview02 = [[UIImageView alloc] initWithFrame:CGRectMake(10.0, (CGRectGetHeight(imageview01.bounds) + 10.0 + 10.0), width, 160.0)];
     [self.view addSubview:imageview02];
     imageview02.tag = 2000;
 }
