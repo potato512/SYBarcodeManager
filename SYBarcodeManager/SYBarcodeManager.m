@@ -150,10 +150,20 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 
 - (BOOL)isValidDevice
 {
-    if (self.captureDevice == nil) {
+    /// 先判断摄像头硬件是否好用
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        // 用户是否允许摄像头使用
+        AVAuthorizationStatus authorizationStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+        // 不允许弹出提示框
+        if (authorizationStatus == AVAuthorizationStatusRestricted || authorizationStatus == AVAuthorizationStatusDenied) {
+            return NO;
+        } else {
+            return YES;
+        }
+    } else {
+        // 硬件问题提示
         return NO;
     }
-    return YES;
 }
 
 - (AVCaptureDevice *)captureDevice

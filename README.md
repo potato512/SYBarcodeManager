@@ -87,6 +87,11 @@ UIImage *image = [SYBarcodeManager barcodeImageWithContent:@"https://github.com/
 
 
 # 修改完善
+* 20190329
+  * 版本号：2.1.9
+  * 异常修改
+    * 摄像头隐私权限屏蔽后crash修复
+
 * 20190308
   * 版本号：2.1.8
   * 功能优化
