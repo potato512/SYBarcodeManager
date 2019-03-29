@@ -17,7 +17,7 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 
 @interface SYBarcodeManager () <AVCaptureMetadataOutputObjectsDelegate>
 
-@property (nonatomic, assign) BOOL isValidDevice;
+@property (nonatomic, assign) BOOL isValidCamera;
 
 @property (nonatomic, strong) AVCaptureDevice *captureDevice;
 
@@ -62,7 +62,7 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 /// 退出扫描
 - (void)QrcodeScanningCancel
 {
-    if (self.isValidDevice) {
+    if (self.isValidCamera) {
         [self.avSession stopRunning];
         
         self.scanningComplete = nil;
@@ -73,7 +73,7 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 /// 开始扫描
 - (void)QrcodeScanningStart:(void (^)(BOOL isEnable, NSString *result))complete
 {
-    if (self.isValidDevice) {
+    if (self.isValidCamera) {
         // 视图
         if (self.superview) {
             [self.superview addSubview:self.scanView];
@@ -148,7 +148,7 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 
 #pragma mark 扫描器
 
-- (BOOL)isValidDevice
+- (BOOL)isValidCamera
 {
     /// 先判断摄像头硬件是否好用
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
@@ -284,7 +284,7 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
         
         if (self.scanningComplete) {
             NSString *result = metadataObject.stringValue;
-            self.scanningComplete(self.isValidDevice, result);
+            self.scanningComplete(self.isValidCamera, result);
         }
     }
 }
@@ -428,7 +428,7 @@ void ProviderReleaseCacheData (void *info, const void *data, size_t size)
     BOOL enable = NO;
     BOOL open = NO;
     
-    if (self.isValidDevice) {
+    if (self.isValidCamera) {
         if ([self.captureDevice hasTorch] && [self.captureDevice hasFlash])
         {
             enable = YES;
