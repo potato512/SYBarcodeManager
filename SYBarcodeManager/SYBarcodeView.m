@@ -110,6 +110,7 @@ static CGFloat const originXY = 10.0;
     if (width > self.frame.size.width) {
         rectTmp.size.width = self.frame.size.width - self.scanFrame.origin.x - 2.5;
     }
+    
     if (height > self.frame.size.height) {
         rectTmp.size.height = self.frame.size.height - self.scanFrame.origin.y - 2.5;
     }
