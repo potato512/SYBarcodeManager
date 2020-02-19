@@ -36,13 +36,24 @@
 /// 扫描提示语字体颜色（默认值: 透明白）
 @property (nonatomic, strong) UIColor *messageColor;
 
+/// 光线强弱值
+@property (nonatomic, copy) void (^brightnessComplete)(CGFloat brightness);
+
 #pragma mark - 扫描二维码
 
 /// 退出扫描
 - (void)QrcodeScanningCancel;
-
 /// 开始扫描
+- (void)QrcodeScanningStart;
+
+/// 开始扫描，初始化及立即开始，扫描结果回调
 - (void)QrcodeScanningStart:(void (^)(BOOL isEnable, NSString *result))complete;
+/// 开始扫描，初始化未开始
+- (void)QrcodeScanningComplete:(void (^)(BOOL isEnable, NSString *result))complete;
+
+#pragma mark - 音效
+/// 播放音效
+- (void)QrcodeScanningPlaySoundName:(NSString *)name;
 
 #pragma mark - 长按识别二维码
 
@@ -74,6 +85,11 @@
 
  @param complete 状态回调
  */
-- (void)openFlashLight:(void (^)(BOOL hasFlash, BOOL isOpen))complete;
+- (void)openFlashLightComplete:(void (^)(BOOL hasFlash, BOOL isOpen))complete;
+
+/// 开启灯光
+- (void)openFlashLight;
+/// 关闭灯光
+- (void)closeFlashLight;
 
 @end

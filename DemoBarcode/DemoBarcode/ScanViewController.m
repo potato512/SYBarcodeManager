@@ -24,12 +24,15 @@
     self.title = @"二维码扫描";
     
     UIButton *scanButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, 40.0, 40.0)];
+    scanButton.tag = 1000;
+    scanButton.selected = YES;
     [scanButton setTitle:@"开始" forState:UIControlStateNormal];
     [scanButton setTitle:@"退出" forState:UIControlStateSelected];
     [scanButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [scanButton setTitleColor:[UIColor redColor] forState:UIControlStateHighlighted];
     [scanButton setTitleColor:[UIColor redColor] forState:UIControlStateSelected];
     [scanButton addTarget:self action:@selector(scanClick:) forControlEvents:UIControlEventTouchUpInside];
+    //
     UIButton *lightButton = [[UIButton alloc] initWithFrame:CGRectMake(60.0, 0.0, 40.0, 40.0)];
     [lightButton setTitle:@"开灯" forState:UIControlStateNormal];
     [lightButton setTitle:@"关灯" forState:UIControlStateSelected];
@@ -88,7 +91,22 @@
         self.scanningBarcode.scanCornerColor = [[UIColor orangeColor] colorWithAlphaComponent:1.0];
         self.scanningBarcode.scanFrame = CGRectMake(100.0, (CGRectGetHeight(self.view.bounds) - (CGRectGetWidth(self.view.bounds) - 100.0 * 2)) / 2, (CGRectGetWidth(self.view.bounds) - 100.0 * 2), (CGRectGetWidth(self.view.bounds) - 100.0 * 2));
     }
-    [self.scanningBarcode QrcodeScanningStart:^(BOOL isEnable, NSString *result) {
+    
+    __weak ScanViewController *weakSelf = self;
+    // 方法1
+//    [self.scanningBarcode QrcodeScanningStart:^(BOOL isEnable, NSString *result) {
+//        NSString *message = result;
+//        if (isEnable) {
+//            message = result;
+//        } else {
+//            message = @"设备不支持";
+//        }
+//        [[[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:nil otherButtonTitles:@"知道了", nil] show];
+//    }];
+    
+    // 方法2
+    [self.scanningBarcode QrcodeScanningComplete:^(BOOL isEnable, NSString *result) {
+        //
         NSString *message = result;
         if (isEnable) {
             message = result;
@@ -97,30 +115,37 @@
         }
         [[[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:nil otherButtonTitles:@"知道了", nil] show];
     }];
+     [self.scanningBarcode QrcodeScanningStart];
 }
 
 - (void)scanClick:(UIButton *)button
 {
     if (button.selected) {
+        button.selected = NO;
         [self.scanningBarcode QrcodeScanningCancel];
     } else {
-        [self.scanningBarcode QrcodeScanningStart:^(BOOL isEnable, NSString *result) {
-            NSString *message = result;
-            if (isEnable) {
-                message = result;
-                
-                button.selected = !button.selected;
-            } else {
-                message = @"设备不支持";
-            }
-            [[[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:nil otherButtonTitles:@"知道了", nil] show];
-        }];
+        button.selected = YES;
+        // 方法1
+//        [self.scanningBarcode QrcodeScanningStart:^(BOOL isEnable, NSString *result) {
+//            NSString *message = result;
+//            if (isEnable) {
+//                message = result;
+//
+//                button.selected = !button.selected;
+//            } else {
+//                message = @"设备不支持";
+//            }
+//            [[[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:nil otherButtonTitles:@"知道了", nil] show];
+//        }];
+        
+        // 方法2
+        [self.scanningBarcode QrcodeScanningStart];
     }
 }
 
 - (void)lightClick:(UIButton *)button
 {
-    [self.scanningBarcode openFlashLight:^(BOOL hasFlash, BOOL isOpen) {
+    [self.scanningBarcode openFlashLightComplete:^(BOOL hasFlash, BOOL isOpen) {
         if (hasFlash) {
             button.selected = isOpen;
         } else {
@@ -129,14 +154,27 @@
     }];
 }
 
+- (void)showLight:(BOOL)show
+{
+    if (show) {
+        [self.scanningBarcode openFlashLight];
+    }
+}
+
 #pragma mark - 二维码扫描
     
 - (SYBarcodeManager *)scanningBarcode
 {
-    if (!_scanningBarcode) {
+    if (_scanningBarcode == nil) {
         CGRect rect = CGRectMake(60.0, (CGRectGetHeight(self.view.bounds) - (CGRectGetWidth(self.view.bounds) - 60.0 * 2)) / 2, (CGRectGetWidth(self.view.bounds) - 60.0 * 2), (CGRectGetWidth(self.view.bounds) - 60.0 * 2));
         rect = self.view.bounds;
         _scanningBarcode = [[SYBarcodeManager alloc] initWithFrame:rect view:self.view];
+        
+        __weak ScanViewController *weakSelf = self;
+        _scanningBarcode.brightnessComplete = ^(CGFloat brightness) {
+            NSLog(@"光线强度brightness %f", brightness);
+            [weakSelf showLight:(brightness > 1.0 ? NO : YES)];
+        };
     }
     
     return _scanningBarcode;

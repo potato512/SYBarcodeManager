@@ -15,7 +15,7 @@ typedef void (^ScanningComplete)(BOOL isValid, NSString *scanResult);
 typedef void (^SaveToPhotosAlbumComplete)(BOOL isSuccess);
 static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 
-@interface SYBarcodeManager () <AVCaptureMetadataOutputObjectsDelegate>
+@interface SYBarcodeManager () <AVCaptureMetadataOutputObjectsDelegate, AVCaptureVideoDataOutputSampleBufferDelegate>
 
 @property (nonatomic, assign) BOOL isValidCamera;
 
@@ -48,12 +48,15 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
         self.superview = superView;
         CGFloat size = ((frame.size.width > frame.size.height ? frame.size.height : frame.size.width) * 0.6);
         self.scanFrame = CGRectMake((frame.size.width - size) / 2, (frame.size.width - size) / 2, size, size);
+        //
+        [self addNotification];
     }
     return self;
 }
     
 - (void)dealloc
 {
+    [NSNotificationCenter.defaultCenter removeObserver:self];
     NSLog(@"%@ 被释放了...", self.class);
 }
     
@@ -63,15 +66,41 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 - (void)QrcodeScanningCancel
 {
     if (self.isValidCamera) {
-        [self.avSession stopRunning];
+        if (self.avSession.isRunning) {
+            [self.avSession stopRunning];
+        }
         
         self.scanningComplete = nil;
         [self.scanView scanLineStop];
+        [self resetZoomFactor];
+        [self closeFlashLight];
     }
 }
 
 /// 开始扫描
+- (void)QrcodeScanningStart
+{
+    if (self.isValidCamera) {
+        if (!self.avSession.isRunning) {
+            [self.avSession startRunning];
+            [self.scanView scanLineStart];
+        }
+    }
+}
+
+/// 开始扫描，初始化及立即开始，及扫描结果回调
 - (void)QrcodeScanningStart:(void (^)(BOOL isEnable, NSString *result))complete
+{
+    [self QrcodeScanningStart:YES complete:complete];
+}
+/// 开始扫描，初始化未开始
+- (void)QrcodeScanningComplete:(void (^)(BOOL isEnable, NSString *result))complete
+{
+    [self QrcodeScanningStart:NO complete:complete];
+}
+
+/// 开始扫描初始化及是否立即开始
+- (void)QrcodeScanningStart:(BOOL)isStart complete:(void (^)(BOOL isEnable, NSString *result))complete
 {
     if (self.isValidCamera) {
         // 视图
@@ -96,9 +125,9 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
             self.scanView.superview.layer.masksToBounds = YES;
         }
         
-        // 开始捕获
-        [self.avSession startRunning];
-        [self.scanView scanLineStart];
+        if (isStart) {
+            [self QrcodeScanningStart];
+        }
     } else {
         if (complete) {
             complete(NO, nil);
@@ -142,6 +171,8 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
 {
     if (_scanView == nil) {
         _scanView = [[SYBarcodeView alloc] initWithFrame:self.superFrame];
+        //
+        [self addGesture:_scanView];
     }
     return _scanView;
 }
@@ -174,36 +205,58 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
     return _captureDevice;
 }
     
+
 - (AVCaptureSession *)avSession
 {
     if (_avSession == nil) {
-        
+
         // 创建输入流
         AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:self.captureDevice error:nil];
-        
+
         // 创建输出流
         AVCaptureMetadataOutput *output = [[AVCaptureMetadataOutput alloc] init];
         // 设置代理 在主线程里刷新
         [output setMetadataObjectsDelegate:self queue:dispatch_get_main_queue()];
-        
+
         // 初始化链接对象
         _avSession = [[AVCaptureSession alloc] init];
         // 高质量采集率
         [_avSession setSessionPreset:AVCaptureSessionPresetHigh];
+
+        if ([_avSession canAddInput:input]) {
+            [_avSession addInput:input];
+        }
+        if ([_avSession canAddOutput:output]) {
+            [_avSession addOutput:output];
+            
+            // 设置扫码支持的编码格式(如下设置条形码和二维码兼容)
+            // output.metadataObjectTypes = @[AVMetadataObjectTypeQRCode, AVMetadataObjectTypeEAN13Code, AVMetadataObjectTypeEAN8Code, AVMetadataObjectTypeUPCECode, AVMetadataObjectTypeCode39Code, AVMetadataObjectTypeCode39Mod43Code, AVMetadataObjectTypeCode93Code, AVMetadataObjectTypeCode128Code, AVMetadataObjectTypePDF417Code];
+            // 仅条形码
+            // output.metadataObjectTypes = @[AVMetadataObjectTypeQRCode];
+            // 条形码和二维码
+            // output.metadataObjectTypes = @[AVMetadataObjectTypeQRCode, AVMetadataObjectTypeEAN13Code, AVMetadataObjectTypeEAN8Code, AVMetadataObjectTypeCode128Code];
+            if ([output.availableMetadataObjectTypes containsObject:AVMetadataObjectTypeQRCode] &&
+                        [output.availableMetadataObjectTypes containsObject:AVMetadataObjectTypeCode128Code] &&
+                        [output.availableMetadataObjectTypes containsObject:AVMetadataObjectTypeEAN13Code]) {
+                        output.metadataObjectTypes = @[AVMetadataObjectTypeQRCode, AVMetadataObjectTypeCode128Code, AVMetadataObjectTypeEAN13Code];
+            }
+        }
         
-        [_avSession addInput:input];
-        [_avSession addOutput:output];
+        // 光线
+        [self lightOutput:_avSession];
         
-        // 设置扫码支持的编码格式(如下设置条形码和二维码兼容)
-//        output.metadataObjectTypes = @[AVMetadataObjectTypeQRCode, AVMetadataObjectTypeEAN13Code, AVMetadataObjectTypeEAN8Code, AVMetadataObjectTypeUPCECode, AVMetadataObjectTypeCode39Code, AVMetadataObjectTypeCode39Mod43Code, AVMetadataObjectTypeCode93Code, AVMetadataObjectTypeCode128Code, AVMetadataObjectTypePDF417Code];
-//        output.metadataObjectTypes = @[AVMetadataObjectTypeQRCode]; // 仅条形码
-        output.metadataObjectTypes = @[AVMetadataObjectTypeQRCode, AVMetadataObjectTypeEAN13Code, AVMetadataObjectTypeEAN8Code, AVMetadataObjectTypeCode128Code]; // 条形码和二维码
+        // ??
+        [self.captureDevice lockForConfiguration:nil];
+        if (self.captureDevice.isFocusPointOfInterestSupported && [self.captureDevice isFocusModeSupported:AVCaptureFocusModeContinuousAutoFocus]) {
+            self.captureDevice.focusMode = AVCaptureFocusModeContinuousAutoFocus;
+        }
+        [self.captureDevice unlockForConfiguration];
         
         // 调整扫描位置（取值范围{0,0,1,1}，且取反{y,x,height,width}）
         CGSize size = [UIScreen mainScreen].bounds.size;
         output.rectOfInterest = CGRectMake(_scanFrame.origin.y / size.height, _scanFrame.origin.x / size.width, _scanFrame.size.height / size.height, _scanFrame.size.width / size.width);
     }
-    
+
     return _avSession;
 }
 
@@ -278,9 +331,12 @@ static SaveToPhotosAlbumComplete saveToPhotosAlbumComplete;
         
         // 停止扫描
         [self.avSession stopRunning];
-        
         // 停止扫描线
         [self.scanView scanLineStop];
+        // 大小复原
+        [self resetZoomFactor];
+        // 关闭灯光
+        [self closeFlashLight];
         
         if (self.scanningComplete) {
             NSString *result = metadataObject.stringValue;
@@ -423,18 +479,16 @@ void ProviderReleaseCacheData (void *info, const void *data, size_t size)
 
 #pragma mark - 闪光灯
 
-- (void)openFlashLight:(void (^)(BOOL hasFlash, BOOL isOpen))complete
+- (void)openFlashLightComplete:(void (^)(BOOL hasFlash, BOOL isOpen))complete
 {
     BOOL enable = NO;
     BOOL open = NO;
     
     if (self.isValidCamera) {
-        if ([self.captureDevice hasTorch] && [self.captureDevice hasFlash])
-        {
+        if ([self.captureDevice hasTorch] && [self.captureDevice hasFlash]) {
             enable = YES;
             
-            if (self.captureDevice.torchMode == AVCaptureTorchModeOff)
-            {
+            if (self.captureDevice.torchMode == AVCaptureTorchModeOff) {
                 [self.captureDevice lockForConfiguration:nil];
                 [self.captureDevice setTorchMode: AVCaptureTorchModeOn];
                 [self.captureDevice unlockForConfiguration];
@@ -458,5 +512,129 @@ void ProviderReleaseCacheData (void *info, const void *data, size_t size)
     }
 }
 
+- (void)openFlashLight
+{
+    [self.captureDevice lockForConfiguration:nil];
+    [self.captureDevice setTorchMode: AVCaptureTorchModeOn];
+    [self.captureDevice unlockForConfiguration];
+}
+
+- (void)closeFlashLight
+{
+    [self.captureDevice lockForConfiguration:nil];
+    [self.captureDevice setTorchMode: AVCaptureTorchModeOff];
+    [self.captureDevice unlockForConfiguration];
+}
+
+#pragma mark - 通知
+
+- (void)addNotification
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
+}
+
+- (void)applicationWillEnterForeground:(NSNotification *)notification
+{
+    [self QrcodeScanningCancel];
+}
+
+- (void)applicationDidEnterBackground:(NSNotification *)notification
+{
+    [self QrcodeScanningCancel];
+}
+
+#pragma mark - 缩放手势
+
+- (void)addGesture:(UIView *)view
+{
+    // 缩放手势
+    UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinch:)];
+    view.userInteractionEnabled = YES;
+    [view addGestureRecognizer:pinchGesture];
+}
+
+- (void)pinch:(UIPinchGestureRecognizer *)gesture
+{
+    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    
+    CGFloat minZoomFactor = 1.0;
+    CGFloat maxZoomFactor = device.activeFormat.videoMaxZoomFactor;
+    
+    if (@available(iOS 11.0, *)) {
+        minZoomFactor = device.minAvailableVideoZoomFactor;
+        maxZoomFactor = device.maxAvailableVideoZoomFactor;
+    }
+    
+    static CGFloat lastZoomFactor = 1.0;
+    if (gesture.state == UIGestureRecognizerStateBegan) {
+        lastZoomFactor = device.videoZoomFactor;
+    } else if (gesture.state == UIGestureRecognizerStateChanged) {
+        CGFloat zoomFactor = lastZoomFactor * gesture.scale;
+        zoomFactor = fmaxf(fminf(zoomFactor, maxZoomFactor), minZoomFactor);
+        [device lockForConfiguration:nil];
+        device.videoZoomFactor = zoomFactor;
+        [device unlockForConfiguration];
+    }
+}
+
+// 停止扫描时，复原
+- (void)resetZoomFactor
+{
+    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    [device lockForConfiguration:nil];
+    device.videoZoomFactor = 1.0;
+    [device unlockForConfiguration];
+}
+
+#pragma mark - 光线强弱
+
+- (void)lightOutput:(AVCaptureSession *)session
+{
+    if (session) {
+        // 创建摄像数据输出流
+        AVCaptureVideoDataOutput *videoDataOutput = [[AVCaptureVideoDataOutput alloc] init];
+        [videoDataOutput setSampleBufferDelegate:self queue:dispatch_get_main_queue()];
+        
+        // 添加摄像输出流到会话对象，构成识了别光线强弱
+        if ([session canAddOutput:videoDataOutput]) {
+            [session addOutput:videoDataOutput];
+        }
+    }
+}
+
+- (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
+    // 这个方法会时时调用，但内存很稳定
+    CFDictionaryRef metadataDict = CMCopyDictionaryOfAttachments(NULL,sampleBuffer, kCMAttachmentMode_ShouldPropagate);
+    NSDictionary *metadata = [[NSMutableDictionary alloc] initWithDictionary:(__bridge NSDictionary*)metadataDict];
+    CFRelease(metadataDict);
+    NSDictionary *exifMetadata = [[metadata objectForKey:(NSString *)kCGImagePropertyExifDictionary] mutableCopy];
+    float brightnessValue = [[exifMetadata objectForKey:(NSString *)kCGImagePropertyExifBrightnessValue] floatValue];
+    if (self.brightnessComplete) {
+        self.brightnessComplete(brightnessValue);
+    }
+}
+
+#pragma mark - 音效
+
+- (void)QrcodeScanningPlaySoundName:(NSString *)name
+{
+    if (name == nil || ([name isKindOfClass:NSString.class] && name.length < 0)) {
+        return;
+    }
+    
+    NSString *audioFile = [[NSBundle mainBundle] pathForResource:name ofType:nil];
+    NSURL *fileUrl = [NSURL fileURLWithPath:audioFile];
+    
+    SystemSoundID soundID = 0;
+    AudioServicesCreateSystemSoundID((__bridge CFURLRef)(fileUrl), &soundID);
+    AudioServicesAddSystemSoundCompletion(soundID, NULL, NULL, soundCompleteCallback, NULL);
+    AudioServicesPlaySystemSound(soundID); // 播放音效
+}
+
+void soundCompleteCallback(SystemSoundID soundID, void *clientData)
+{
+
+}
 
 @end

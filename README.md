@@ -34,16 +34,35 @@ self.scanningBarcode.scanFrame = CGRectMake(60.0, 100.0, 80.0, 80.0); // 扫描�
 ~~~ 
 
 ~~~ javascript
-// 开始扫描
+// 初始化及开始扫描
 [self.scanningBarcode QrcodeScanningStart:^(BOOL isEnable, NSString *result) {
-            NSString *message = result;
-            if (isEnable) {
-                message = result;
-            } else {
-                message = @"设备不支持";
-            }
-            [[[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:nil otherButtonTitles:@"知道了", nil] show];
+    NSString *message = result;
+    if (isEnable) {
+        message = result;
+    } else {
+        message = @"设备不支持";
+    }
+    [[[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:nil otherButtonTitles:@"知道了", nil] show];
 }];
+~~~ 
+
+~~~ javascript
+// 初始化未开始扫描
+[self.scanningBarcode QrcodeScanningComplete:^(BOOL isEnable, NSString *result) {
+    //
+    NSString *message = result;
+    if (isEnable) {
+        message = result;
+    } else {
+        message = @"设备不支持";
+    }
+    [[[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:nil otherButtonTitles:@"知道了", nil] show];
+}];
+~~~
+
+~~~ javascript
+// 开始扫描
+[self.scanningBarcode QrcodeScanningStart];
 ~~~ 
 
 ~~~ javascript
@@ -52,15 +71,37 @@ self.scanningBarcode.scanFrame = CGRectMake(60.0, 100.0, 80.0, 80.0); // 扫描�
 ~~~
 
 ~~~ javascript
-// 闪光灯
-[self.scanningBarcode openFlashLight:^(BOOL hasFlash, BOOL isOpen) {
-        if (hasFlash) {
-            
-        } else {
-            [[[UIAlertView alloc] initWithTitle:nil message:@"设备不支持" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"知道了", nil] show];
-        }
-    }];
+// 闪光灯开关回调
+[self.scanningBarcode openFlashLightComplete:^(BOOL hasFlash, BOOL isOpen) {
+    if (hasFlash) {
+        
+    } else {
+        [[[UIAlertView alloc] initWithTitle:nil message:@"设备不支持" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"知道了", nil] show];
+    }
+}];
 ~~~
+
+~~~ javascript
+// 闪光灯开启
+[self.scanningBarcode openFlashLight];
+~~~ 
+
+~~~ javascript
+// 闪光灯关闭
+[self.scanningBarcode closeFlashLight];
+~~~ 
+
+~~~ javascript
+// 光线强弱回调
+self.scanningBarcode.brightnessComplete = ^(CGFloat brightness) {
+    NSLog(@"光线强度brightness %f", brightness);
+};
+~~~ 
+
+~~~ javascript
+/// 播放音效
+[self.scanningBarcode QrcodeScanningPlaySoundName:@"success.mp3"];
+~~~ 
 
 # 扫描二维码效果图
 
@@ -87,6 +128,13 @@ UIImage *image = [SYBarcodeManager barcodeImageWithContent:@"https://github.com/
 
 
 # 修改完善
+* 20200219
+  * 版本号：2.2.1
+  * 功能优化
+    * 扫码速度优化
+    * 手势缩放扫描图片
+    * 光线识别
+
 * 20190329
   * 版本号：2.1.9 2.2.0
   * 异常修改
