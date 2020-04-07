@@ -128,6 +128,11 @@ UIImage *image = [SYBarcodeManager barcodeImageWithContent:@"https://github.com/
 
 
 # 修改完善
+* 20200407
+  * 版本号：2.3.0
+  * carsh闪退修改
+    * 新增闪光灯功能硬件是否支持判断
+    
 * 20200219
   * 版本号：2.2.1
   * 功能优化

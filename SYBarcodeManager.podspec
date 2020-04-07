@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "SYBarcodeManager"
-  s.version      = "2.2.1"
+  s.version      = "2.3.0"
   s.summary      = "SYBarcodeManager is Qr code scanning tool."
   s.homepage     = "https://github.com/potato512/SYBarcodeManager"
   s.license      = { :type => "MIT", :file => "LICENSE" }

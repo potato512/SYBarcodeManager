@@ -514,16 +514,24 @@ void ProviderReleaseCacheData (void *info, const void *data, size_t size)
 
 - (void)openFlashLight
 {
-    [self.captureDevice lockForConfiguration:nil];
-    [self.captureDevice setTorchMode: AVCaptureTorchModeOn];
-    [self.captureDevice unlockForConfiguration];
+    if (self.isValidCamera) {
+        if (self.captureDevice.hasTorch && self.captureDevice.hasFlash) {
+            [self.captureDevice lockForConfiguration:nil];
+            [self.captureDevice setTorchMode: AVCaptureTorchModeOn];
+            [self.captureDevice unlockForConfiguration];
+        }
+    }
 }
 
 - (void)closeFlashLight
 {
-    [self.captureDevice lockForConfiguration:nil];
-    [self.captureDevice setTorchMode: AVCaptureTorchModeOff];
-    [self.captureDevice unlockForConfiguration];
+    if (self.isValidCamera) {
+        if (self.captureDevice.hasTorch && self.captureDevice.hasFlash) {
+            [self.captureDevice lockForConfiguration:nil];
+            [self.captureDevice setTorchMode: AVCaptureTorchModeOff];
+            [self.captureDevice unlockForConfiguration];
+        }
+    }
 }
 
 #pragma mark - 通知
